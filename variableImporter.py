@@ -45,11 +45,11 @@ country = df['countries'].unique()
 country_name = [i.upper() for i in country]
 region = [i.upper() for i in df.loc[df['year'] == 2018, 'region']]
 ranking2018 = [int(i) for i in df.loc[df['year'] == 2018, 'hf_rank']]
-hfscore2018 = ['{:.2f}'.format(i) for i in df.loc[df['year'] == 2018, 'hf_score']] # two decimal points
+hfscore2018 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2018, 'hf_score']] # two decimal points
 rankingpf = [(str(int(i))+'/162') for i in df.loc[df['year'] == 2018, 'pf_rank']]
 rankingef = [(str(int(i))+'/162') for i in df.loc[df['year'] == 2018, 'ef_rank']]
-pfscore2018 = ['{:.2f}'.format(i) for i in df.loc[df['year'] == 2018, 'pf_score']] # two decimal points
-efscore2018 = ['{:.2f}'.format(i) for i in df.loc[df['year'] == 2018, 'ef_score']] # two decimal points
+pfscore2018 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2018, 'pf_score']] # two decimal points
+efscore2018 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2018, 'ef_score']] # two decimal points
 
 # personal and economic freedom categories
 list_score_pf_main = []
@@ -182,14 +182,13 @@ for i in df['countries'].unique():
     country_hf = country_hf[::-1]
     countries_score.append(country_hf)
 
-print(region_score)
 
 for i in range(len(countries_score)):
     hf_graph = {'':countries_score[i],
                 '': world_avg,
                 '':region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
-    graph_df.to_csv('graphHF-{}.csv'.format(j for j in country))
+    # graph_df.to_csv('graphHF-{}.csv'.format(j for j in country))
 
 
 # ranking graph
@@ -272,11 +271,11 @@ dscore = []
 for k in df['year'].unique():
     midstep = []
     for i in country:
-        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'pf_score']
-        y = df.loc[(df['year'] == k) & (df['countries'] == i), 'ef_score']
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'pf_score'].values[0]
+        y = df.loc[(df['year'] == k) & (df['countries'] == i), 'ef_score'].values[0]
         # x = float(x)
         # y = float(y)
-        a = str(y) + '\n' + str(x)
+        a = str('{:.2f}'.format(y)) + '\n' + str('{:.2f}'.format(x))
         midstep.append(a)
     dscore.append(midstep)
 
@@ -284,8 +283,8 @@ scores = []
 for i in df['year'].unique():
     midstep = []
     for k in country:
-        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_score']
-        midstep.append('{:.2f}'.format(float(x)))
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_score'].values[0]
+        midstep.append(str('{:.2f}'.format(float(x))))
     scores.append(midstep)
 
 
@@ -293,8 +292,8 @@ rank_years = []
 for i in df['year'].unique():
     midstep2 = []
     for k in country:
-        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank']
-        midstep2.append(int(x))
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank'].values[0]
+        midstep2.append(x)
     rank_years.append(midstep2)
 
 
@@ -308,11 +307,11 @@ d = {'countryname':country_name,
      'scorepf':pfscore2018,
      'rankingef':rankingef,
      'scoreef':efscore2018,
-     'listscorepfmain':list_score_pf_main,
-     'listscorepf':list_score_other_pf_main,
+     'listscorepfmain':final_pf_main,
+     'listscorepf':final_other_pf_main,
      '%graphpf':['path/pf{}.csv'.format(co) for co in df['countries'].unique()],
-     'listscoreefmain':list_score_ef_main,
-     'listscoreef':list_score_other_ef_main,
+     'listscoreefmain':final_ef_main,
+     'listscoreef':final_other_ef_main,
      '%graphef':['path/ef{}.csv'.format(co) for co in df['countries'].unique()],
      #'%graphscorehf':blank,
      '%graphrankinghf':['path/rank{}.csv'.format(co) for co in df['countries'].unique()],
@@ -376,5 +375,6 @@ d = {'countryname':country_name,
 
 # create dataframe
 df_final = pd.DataFrame(d)
+df_final.to_csv('final.csv', index=False)
 
-print(df_final)
+print('csv FILE CREATED! :)')

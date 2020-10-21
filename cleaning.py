@@ -54,6 +54,8 @@ df = df.drop(columns=['pf_religion_estop_establish', 'pf_religion_estop_operate'
 df = df.replace(to_replace='-',value='')
 cols = df.columns.drop(['year', 'ISO_code', 'countries', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
+# df['hf_rank'] = df['hf_rank'].astype(int)
+
 
 # calculate the rest of the columns
 df['womens_freedom'] = df[['pf_ss_women_inheritance', 'pf_ss_women', 'pf_ss_women_fgm',
