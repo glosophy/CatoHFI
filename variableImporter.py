@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 df = pd.read_csv('all_countries.csv')
+#df.fillna('-', inplace=True)
 
 main_pf = ['pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_association', 'pf_expression', 'pf_identity']
 main_ef = ['ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation']
@@ -49,7 +50,6 @@ rankingpf = [(str(int(i))+'/162') for i in df.loc[df['year'] == 2018, 'pf_rank']
 rankingef = [(str(int(i))+'/162') for i in df.loc[df['year'] == 2018, 'ef_rank']]
 pfscore2018 = ['{:.2f}'.format(i) for i in df.loc[df['year'] == 2018, 'pf_score']] # two decimal points
 efscore2018 = ['{:.2f}'.format(i) for i in df.loc[df['year'] == 2018, 'ef_score']] # two decimal points
-
 
 # personal and economic freedom categories
 list_score_pf_main = []
@@ -119,8 +119,6 @@ for i in list_score_other_pf_main:
     final_other_pf_main.append(a)
 
 # graph pf and ef
-print(len(country))
-
 for co in country:
     pf = []
     ef = []
@@ -154,7 +152,8 @@ for co in country:
 
 # human freedom chart - order: country, world, region - how to approach it? 141 no gender + the country? or all countries?
 selected = pd.read_csv('selected_countries.csv')
-region = pd.read_csv('CAT_hf_score_NO_GENDER.csv')
+# selected.fillna('-', inplace=True)
+region1 = pd.read_csv('CAT_hf_score_NO_GENDER.csv')
 
 # world average
 world_avg = []
@@ -170,9 +169,10 @@ region_score = []
 for i in df['countries'].unique():
     country_hf = []
 
-    region_hf = df.loc[(df['countries'] == i) & (df['year'] == 2008), 'region']
-    reg = region[region_hf]
-    region_score.append(reg)
+    # region_hf = df.loc[(df['countries'] == i) & (df['year'] == 2008), 'region']
+    # for k in region1[region_hf]:
+    #     reg = region1[region_hf]
+    #     region_score.append(reg)
 
     for j in df['year'].unique():
         hf_score = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_score_NO_GENDER']
@@ -205,11 +205,11 @@ for i in df['countries'].unique():
 # main years second page
 list_score_pf_main_page2 = []
 list_score_other_pf_main_page2 = []
-for i in country:
+for k in df['year'].unique():
     pf = []
     other_pf = []
 
-    for k in df['year'].unique():
+    for i in country:
         years_main = []
         years_other = []
         for j in main_pf:
@@ -219,30 +219,123 @@ for i in country:
         for l in other_cat_pf:
             x = df.loc[(df['year'] == k) & (df['countries'] == i), l]
             years_other.append(float(x))
+
         pf.append(years_main)
         other_pf.append(years_other)
 
-    list_score_pf_main_page2.append(pf)
-    list_score_other_pf_main_page2.append(other_pf)
+    years_pf_pf = []
+    for m in pf:
+        a = str(m[0]) + '\n'*4 + str(m[1]) + '\n'*4 + str(m[2]) + '\n'*4 + str(m[3]) + '\n'*5 + str(m[4]) + '\n'*6 \
+            + str(m[5]) + '\n'*7 + str(m[6])
+        years_pf_pf.append(a)
 
+    years_other_other = []
+    for n in other_pf:
+        b = '\n' * 1 + str(n[0]) + '\n' + str(n[1]) + '\n' + str(n[2]) + '\n' * 3 + \
+            str(n[3]) + '\n' + str(n[4]) + '\n' + str(n[5]) + '\n' * 3 + \
+            str(n[6]) + '\n' + str(n[7]) + '\n' + str(n[8]) + '\n' * 3 + \
+            str(n[9]) + '\n' + str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n' * 3 + \
+            str(n[13]) + '\n' + str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' * 3 + \
+            str(n[18]) + '\n' + str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n' + str(n[22]) + '\n' + str(
+            n[23]) + '\n' * 3 + str(n[24]) + '\n' + str(n[25]) + '\n' + str(n[26])
+        years_other_other.append(b)
 
-# print(list_score_pf_main_page2)
-print(list_score_other_pf_main_page2)
+    list_score_pf_main_page2.append(years_pf_pf)
+    list_score_other_pf_main_page2.append(years_other_other)
+
 
 # score country by year
-
 score_year = []
-for i in country:
+for k in df['year'].unique():
     score = []
-    for k in df['year'].unique():
-            x = df.loc[(df['year'] == k) & (df['countries'] == i), 'hf_score']
-            x = float(x)
-            score.append('{:.2f}'.format(x))
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'hf_score']
+        x = float(x)
+        score.append('{:.2f}'.format(x))
     score_year.append(score)
 
-print(score_year)
+
+# ranking by year
+rank_year = []
+for k in df['year'].unique():
+    rank = []
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'hf_rank']
+        x = float(x)
+        rank.append('{:.2f}'.format(x))
+    rank_year.append(rank)
 
 
+# dscores:
+dscore = []
+for k in df['year'].unique():
+    midstep = []
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'pf_score']
+        y = df.loc[(df['year'] == k) & (df['countries'] == i), 'ef_score']
+        # x = float(x)
+        # y = float(y)
+        a = str(y) + '\n' + str(x)
+        midstep.append(a)
+    dscore.append(midstep)
 
-# pending:
-# replace NaN with "-" in all dfs
+#
+# # create dictionary with all variables
+# d = {'countryname':country_name,
+#      'country':country,
+#      'region':region,
+#      'ranking':ranking2018,
+#      'score':hfscore2018,
+#      'rankingpf':rankingpf,
+#      'scorepf':pfscore2018,
+#      'rankingef':rankingef,
+#      'scoreef':efscore2018,
+#      'listscorepfmain':list_score_pf_main,
+#      'listscorepf':list_score_other_pf_main,
+#      '%graphpf':['path/pf{}.csv'.format(co) for co in df['countries'].unique()],
+#      'listscoreefmain':list_score_ef_main,
+#      'listscoreef':list_score_other_ef_main,
+#      '%graphef':['path/ef{}.csv'.format(co) for co in df['countries'].unique()],
+#      #'%graphscorehf':blank,
+#      '%graphrankinghf':['path/rank{}.csv'.format(co) for co in df['countries'].unique()],
+#      'yearsmain2018':list_score_pf_main_page2[0],
+#      'yearsmain2017':list_score_pf_main_page2[1],
+#      'yearsmain2016': list_score_pf_main_page2[2],
+#      'yearsmain2015': list_score_pf_main_page2[3],
+#      'yearsmain2014': list_score_pf_main_page2[4],
+#      'yearsmain2013': list_score_pf_main_page2[5],
+#      'yearsmain2012': list_score_pf_main_page2[6],
+#      'yearsmain2011': list_score_pf_main_page2[7],
+#      'yearsmain2010': list_score_pf_main_page2[8],
+#      'yearsmain2009': list_score_pf_main_page2[9],
+#      'yearsmain2008': list_score_pf_main_page2[10],
+#      'year2018': list_score_other_pf_main_page2[0],
+#      'year2017': list_score_other_pf_main_page2[1],
+#      'year2016': list_score_other_pf_main_page2[2],
+#      'year2015': list_score_other_pf_main_page2[3],
+#      'year2014': list_score_other_pf_main_page2[4],
+#      'year2013': list_score_other_pf_main_page2[5],
+#      'year2012': list_score_other_pf_main_page2[6],
+#      'year2011': list_score_other_pf_main_page2[7],
+#      'year2010': list_score_other_pf_main_page2[8],
+#      'year2009': list_score_other_pf_main_page2[9],
+#      'year2008': list_score_other_pf_main_page2[10],
+#      'dscore2018':dscore[0],
+#      'dscore2017': dscore[1],
+#      'dscore2016': dscore[2],
+#      'dscore2015': dscore[3],
+#      'dscore2014': dscore[4],
+#      'dscore2013': dscore[5],
+#      'dscore2012': dscore[6],
+#      'dscore2011': dscore[7],
+#      'dscore2010': dscore[8],
+#      'dscore2009': dscore[9],
+#      'dscore2008': dscore[10],
+#
+#                          }
+#
+
+# # create dataframe
+# df_final = pd.DataFrame(d)
+#
+# print(df_final)
