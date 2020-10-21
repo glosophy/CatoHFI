@@ -153,7 +153,7 @@ for co in country:
 # human freedom chart - order: country, world, region - how to approach it? 141 no gender + the country? or all countries?
 selected = pd.read_csv('selected_countries.csv')
 # selected.fillna('-', inplace=True)
-region1 = pd.read_csv('CAT_hf_score_NO_GENDER.csv')
+# region1 = pd.read_csv('CAT_hf_score_NO_GENDER.csv')
 
 # world average
 world_avg = []
@@ -169,10 +169,11 @@ region_score = []
 for i in df['countries'].unique():
     country_hf = []
 
-    # region_hf = df.loc[(df['countries'] == i) & (df['year'] == 2008), 'region']
-    # for k in region1[region_hf]:
-    #     reg = region1[region_hf]
-    #     region_score.append(reg)
+    cat_by_region = selected.groupby(['year', 'region'])['hf_score_NO_GENDER'].mean().reset_index()
+    cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score_NO_GENDER')
+    reg = df.loc[(df['year'] == 2018) & (df['countries'] == i), 'region'].values[0]
+    reg_score = cat_pivot[str(reg)].to_list()
+    region_score.append(reg_score)
 
     for j in df['year'].unique():
         hf_score = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_score_NO_GENDER']
@@ -181,14 +182,14 @@ for i in df['countries'].unique():
     country_hf = country_hf[::-1]
     countries_score.append(country_hf)
 
+print(region_score)
 
-
-# region_list = []
-# for j in region_score:
-#     for i in df['region'].unique():
-#         x = region_score[0][j].to_list()
-#         region_list.append(x)
-x = region_score[0]['Eastern Europe'].to_list()
+for i in range(len(countries_score)):
+    hf_graph = {'':countries_score[i],
+                '': world_avg,
+                '':region_score[i]}
+    graph_df = pd.DataFrame(hf_graph)
+    graph_df.to_csv('graphHF-{}.csv'.format(j for j in country))
 
 
 # ranking graph
@@ -279,63 +280,101 @@ for k in df['year'].unique():
         midstep.append(a)
     dscore.append(midstep)
 
-#
-# # create dictionary with all variables
-# d = {'countryname':country_name,
-#      'country':country,
-#      'region':region,
-#      'ranking':ranking2018,
-#      'score':hfscore2018,
-#      'rankingpf':rankingpf,
-#      'scorepf':pfscore2018,
-#      'rankingef':rankingef,
-#      'scoreef':efscore2018,
-#      'listscorepfmain':list_score_pf_main,
-#      'listscorepf':list_score_other_pf_main,
-#      '%graphpf':['path/pf{}.csv'.format(co) for co in df['countries'].unique()],
-#      'listscoreefmain':list_score_ef_main,
-#      'listscoreef':list_score_other_ef_main,
-#      '%graphef':['path/ef{}.csv'.format(co) for co in df['countries'].unique()],
-#      #'%graphscorehf':blank,
-#      '%graphrankinghf':['path/rank{}.csv'.format(co) for co in df['countries'].unique()],
-#      'yearsmain2018':list_score_pf_main_page2[0],
-#      'yearsmain2017':list_score_pf_main_page2[1],
-#      'yearsmain2016': list_score_pf_main_page2[2],
-#      'yearsmain2015': list_score_pf_main_page2[3],
-#      'yearsmain2014': list_score_pf_main_page2[4],
-#      'yearsmain2013': list_score_pf_main_page2[5],
-#      'yearsmain2012': list_score_pf_main_page2[6],
-#      'yearsmain2011': list_score_pf_main_page2[7],
-#      'yearsmain2010': list_score_pf_main_page2[8],
-#      'yearsmain2009': list_score_pf_main_page2[9],
-#      'yearsmain2008': list_score_pf_main_page2[10],
-#      'year2018': list_score_other_pf_main_page2[0],
-#      'year2017': list_score_other_pf_main_page2[1],
-#      'year2016': list_score_other_pf_main_page2[2],
-#      'year2015': list_score_other_pf_main_page2[3],
-#      'year2014': list_score_other_pf_main_page2[4],
-#      'year2013': list_score_other_pf_main_page2[5],
-#      'year2012': list_score_other_pf_main_page2[6],
-#      'year2011': list_score_other_pf_main_page2[7],
-#      'year2010': list_score_other_pf_main_page2[8],
-#      'year2009': list_score_other_pf_main_page2[9],
-#      'year2008': list_score_other_pf_main_page2[10],
-#      'dscore2018':dscore[0],
-#      'dscore2017': dscore[1],
-#      'dscore2016': dscore[2],
-#      'dscore2015': dscore[3],
-#      'dscore2014': dscore[4],
-#      'dscore2013': dscore[5],
-#      'dscore2012': dscore[6],
-#      'dscore2011': dscore[7],
-#      'dscore2010': dscore[8],
-#      'dscore2009': dscore[9],
-#      'dscore2008': dscore[10],
-#
-#                          }
-#
+scores = []
+for i in df['year'].unique():
+    midstep = []
+    for k in country:
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_score']
+        midstep.append('{:.2f}'.format(float(x)))
+    scores.append(midstep)
 
-# # create dataframe
-# df_final = pd.DataFrame(d)
-#
-# print(df_final)
+
+rank_years = []
+for i in df['year'].unique():
+    midstep2 = []
+    for k in country:
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank']
+        midstep2.append(int(x))
+    rank_years.append(midstep2)
+
+
+# create dictionary with all variables
+d = {'countryname':country_name,
+     'country':country,
+     'region':region,
+     'ranking':ranking2018,
+     'score':hfscore2018,
+     'rankingpf':rankingpf,
+     'scorepf':pfscore2018,
+     'rankingef':rankingef,
+     'scoreef':efscore2018,
+     'listscorepfmain':list_score_pf_main,
+     'listscorepf':list_score_other_pf_main,
+     '%graphpf':['path/pf{}.csv'.format(co) for co in df['countries'].unique()],
+     'listscoreefmain':list_score_ef_main,
+     'listscoreef':list_score_other_ef_main,
+     '%graphef':['path/ef{}.csv'.format(co) for co in df['countries'].unique()],
+     #'%graphscorehf':blank,
+     '%graphrankinghf':['path/rank{}.csv'.format(co) for co in df['countries'].unique()],
+     'yearsmain2018':list_score_pf_main_page2[0],
+     'yearsmain2017':list_score_pf_main_page2[1],
+     'yearsmain2016': list_score_pf_main_page2[2],
+     'yearsmain2015': list_score_pf_main_page2[3],
+     'yearsmain2014': list_score_pf_main_page2[4],
+     'yearsmain2013': list_score_pf_main_page2[5],
+     'yearsmain2012': list_score_pf_main_page2[6],
+     'yearsmain2011': list_score_pf_main_page2[7],
+     'yearsmain2010': list_score_pf_main_page2[8],
+     'yearsmain2009': list_score_pf_main_page2[9],
+     'yearsmain2008': list_score_pf_main_page2[10],
+     'year2018': list_score_other_pf_main_page2[0],
+     'year2017': list_score_other_pf_main_page2[1],
+     'year2016': list_score_other_pf_main_page2[2],
+     'year2015': list_score_other_pf_main_page2[3],
+     'year2014': list_score_other_pf_main_page2[4],
+     'year2013': list_score_other_pf_main_page2[5],
+     'year2012': list_score_other_pf_main_page2[6],
+     'year2011': list_score_other_pf_main_page2[7],
+     'year2010': list_score_other_pf_main_page2[8],
+     'year2009': list_score_other_pf_main_page2[9],
+     'year2008': list_score_other_pf_main_page2[10],
+     'dscore2018':dscore[0],
+     'dscore2017': dscore[1],
+     'dscore2016': dscore[2],
+     'dscore2015': dscore[3],
+     'dscore2014': dscore[4],
+     'dscore2013': dscore[5],
+     'dscore2012': dscore[6],
+     'dscore2011': dscore[7],
+     'dscore2010': dscore[8],
+     'dscore2009': dscore[9],
+     'dscore2008': dscore[10],
+     'score2018': scores[0],
+     'score2017': scores[1],
+     'score2016': scores[2],
+     'score2015': scores[3],
+     'score2014': scores[4],
+     'score2013': scores[5],
+     'score2012': scores[6],
+     'score2011': scores[7],
+     'score2010': scores[8],
+     'score2009': scores[9],
+     'score2008': scores[10],
+     'ranking2018': rank_years[0],
+     'ranking2017': rank_years[1],
+     'ranking2016': rank_years[2],
+     'ranking2015': rank_years[3],
+     'ranking2014': rank_years[4],
+     'ranking2013': rank_years[5],
+     'ranking2012': rank_years[6],
+     'ranking2011': rank_years[7],
+     'ranking2010': rank_years[8],
+     'ranking2009': rank_years[9],
+     'ranking2008': rank_years[10]
+}
+
+
+# create dataframe
+df_final = pd.DataFrame(d)
+
+print(df_final)
