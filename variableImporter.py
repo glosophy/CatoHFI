@@ -105,7 +105,7 @@ for i in list_score_other_ef_main:
         str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n'*3 + \
         str(i[17]) + '\n' + str(i[18]) + '\n' + str(i[19]) + '\n' + str(i[20]) + '\n'*3 + \
         str(i[21]) + '\n' + str(i[22]) + '\n' + str(i[23])
-final_other_ef_main.append(a)
+    final_other_ef_main.append(a)
 
 final_other_pf_main = []
 for i in list_score_other_pf_main:
@@ -138,7 +138,8 @@ for co in country:
         pf.insert(pos[i] + acc, 0)
         acc += 1
     w = pd.DataFrame(pf)
-    #w.to_csv('pf{}.csv'.format(co))
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(co),
+             index=False, header=False)
 
     # economic freedom
     pos = [6, 15, 20, 25]
@@ -147,10 +148,11 @@ for co in country:
         ef.insert(pos[i] + acc, 0)
         acc += 1
     w = pd.DataFrame(ef)
-    #w.to_csv('ef{}.csv'.format(co))
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(co),
+             index=False, header=False)
 
 
-# human freedom chart - order: country, world, region - how to approach it? 141 no gender + the country? or all countries?
+# human freedom chart - order: country, world, region
 selected = pd.read_csv('selected_countries.csv')
 # selected.fillna('-', inplace=True)
 # region1 = pd.read_csv('CAT_hf_score_NO_GENDER.csv')
@@ -183,12 +185,13 @@ for i in df['countries'].unique():
     countries_score.append(country_hf)
 
 
-for i in range(len(countries_score)):
-    hf_graph = {'':countries_score[i],
-                '': world_avg,
-                '':region_score[i]}
+for i in range(len(country)):
+    hf_graph = {'hf':countries_score[i],
+                'world': world_avg,
+                'reg':region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
-    # graph_df.to_csv('graphHF-{}.csv'.format(j for j in country))
+    graph_df.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(country[i]),
+                    index=False, header=False)
 
 
 # ranking graph
@@ -199,7 +202,8 @@ for i in df['countries'].unique():
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
-    #w.to_csv('rank{}.csv'.format(i))
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphRank/{}.csv'.format(i),
+             index=False, header=False)
 
 
 # main years second page
@@ -298,25 +302,25 @@ for i in df['year'].unique():
 
 
 # create dictionary with all variables
-d = {'countryname':country_name,
-     'country':country,
-     'region':region,
-     'ranking':ranking2018,
-     'score':hfscore2018,
-     'rankingpf':rankingpf,
-     'scorepf':pfscore2018,
-     'rankingef':rankingef,
-     'scoreef':efscore2018,
-     'listscorepfmain':final_pf_main,
-     'listscorepf':final_other_pf_main,
-     '%graphpf':['path/pf{}.csv'.format(co) for co in df['countries'].unique()],
-     'listscoreefmain':final_ef_main,
-     'listscoreef':final_other_ef_main,
-     '%graphef':['path/ef{}.csv'.format(co) for co in df['countries'].unique()],
-     #'%graphscorehf':blank,
-     '%graphrankinghf':['path/rank{}.csv'.format(co) for co in df['countries'].unique()],
-     'yearsmain2018':list_score_pf_main_page2[0],
-     'yearsmain2017':list_score_pf_main_page2[1],
+d = {'countryname': country_name,
+     'country': country,
+     'region': region,
+     'ranking': ranking2018,
+     'score': hfscore2018,
+     'rankingpf': rankingpf,
+     'scorepf': pfscore2018,
+     'rankingef': rankingef,
+     'scoreef': efscore2018,
+     'listscorepfmain': final_pf_main,
+     'listscorepf': final_other_pf_main,
+     '%graphpf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(co) for co in df['countries'].unique()],
+     'listscoreefmain': final_ef_main,
+     'listscoreef': final_other_ef_main,
+     '%graphef': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(co) for co in df['countries'].unique()],
+     '%graphscorehf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(co) for co in df['countries'].unique()],
+     '%graphrankinghf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphRank{}.csv'.format(co) for co in df['countries'].unique()],
+     'yearsmain2018': list_score_pf_main_page2[0],
+     'yearsmain2017': list_score_pf_main_page2[1],
      'yearsmain2016': list_score_pf_main_page2[2],
      'yearsmain2015': list_score_pf_main_page2[3],
      'yearsmain2014': list_score_pf_main_page2[4],
@@ -337,7 +341,7 @@ d = {'countryname':country_name,
      'year2010': list_score_other_pf_main_page2[8],
      'year2009': list_score_other_pf_main_page2[9],
      'year2008': list_score_other_pf_main_page2[10],
-     'dscore2018':dscore[0],
+     'dscore2018': dscore[0],
      'dscore2017': dscore[1],
      'dscore2016': dscore[2],
      'dscore2015': dscore[3],
@@ -369,12 +373,11 @@ d = {'countryname':country_name,
      'ranking2011': rank_years[7],
      'ranking2010': rank_years[8],
      'ranking2009': rank_years[9],
-     'ranking2008': rank_years[10]
-}
+     'ranking2008': rank_years[10]}
 
 
 # create dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('final.csv', index=False)
+df_final.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)
 
 print('csv FILE CREATED! :)')
