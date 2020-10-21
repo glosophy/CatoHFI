@@ -40,6 +40,28 @@ all_ef = ['ef_government', 'ef_government_consumption', 'ef_government_transfers
           'ef_money_currency', 'ef_trade', 'ef_trade_tariffs', 'ef_trade_regulatory', 'ef_trade_black',
           'ef_trade_movement', 'ef_regulation', 'ef_regulation_credit', 'ef_regulation_labor', 'ef_regulation_business']
 
+country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Australia', 'Austria',
+                'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
+                'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia',
+                'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina', 'Burundi',
+                'Cabo', 'Cambodia', 'Cameroon', 'Canada', 'Central', 'Chad', 'Chile', 'China', 'Colombia',
+                'Congodem', 'Congorep', 'Costa', 'Cote', 'Croatia', 'Cyprus', 'Czech', 'Denmark',
+                'Dominican', 'Ecuador', 'Egypt', 'Salvador', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji',
+                'Finland', 'France', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana',
+                'Greece', 'Guatemala', 'Guinea', 'Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong',
+                'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
+                'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Korea', 'Kuwait', 'Kyrgyz',
+                'Lao', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Lithuania', 'Luxembourg',
+                'Madagascar', 'Malawi', 'Malaysia', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico',
+                'Moldova', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nepal',
+                'Netherlands', 'Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Macedonia', 'Norway', 'Oman',
+                'Pakistan', 'Panama', 'Papua', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal',
+                'Qatar', 'Romania', 'Russian', 'Rwanda', 'Saudi', 'Senegal', 'Serbia', 'Seychelles',
+                'Leone', 'Singapore', 'Slovak', 'Slovenia', 'Africa', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname',
+                'Sweden', 'Switzerland', 'Syrian', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor',
+                'Togo', 'Trinidad', 'Tunisia', 'Turkey', 'Uganda', 'Ukraine', 'Emirates', 'Kingdom', 'UnitedStates',
+                'Uruguay', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe']
+
 
 country = df['countries'].unique()
 country_name = [i.upper() for i in country]
@@ -119,16 +141,16 @@ for i in list_score_other_pf_main:
     final_other_pf_main.append(a)
 
 # graph pf and ef
-for co in country:
+for co in range(len(country)):
     pf = []
     ef = []
 
     for j in all_pf:
-        x = df.loc[(df['year'] == 2018) & (df['countries'] == co), j]
+        x = df.loc[(df['year'] == 2018) & (df['countries'] == country[co]), j]
         pf.append(float(x))
 
     for k in all_ef:
-        x = df.loc[(df['year'] == 2018) & (df['countries'] == co), k]
+        x = df.loc[(df['year'] == 2018) & (df['countries'] == country[co]), k]
         ef.append(float(x))
 
     # personal freedom
@@ -138,7 +160,7 @@ for co in country:
         pf.insert(pos[i] + acc, 0)
         acc += 1
     w = pd.DataFrame(pf)
-    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(co),
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
     # economic freedom
@@ -148,7 +170,7 @@ for co in country:
         ef.insert(pos[i] + acc, 0)
         acc += 1
     w = pd.DataFrame(ef)
-    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(co),
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
 
@@ -190,19 +212,19 @@ for i in range(len(country)):
                 'world': world_avg,
                 'reg':region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
-    graph_df.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(country[i]),
+    graph_df.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(country_file[i]),
                     index=False, header=False)
 
 
 # ranking graph
-for i in df['countries'].unique():
+for i in range(len(country)):
     rank_country = []
     for j in df['year'].unique():
-        ranking = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_rank']
+        ranking = df.loc[(df['year'] == j) & (df['countries'] == country[i]), 'hf_rank']
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphRank/{}.csv'.format(i),
+    w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
 
@@ -313,12 +335,12 @@ d = {'countryname': country_name,
      'scoreef': efscore2018,
      'listscorepfmain': final_pf_main,
      'listscorepf': final_other_pf_main,
-     '%graphpf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(co) for co in df['countries'].unique()],
+     '%graphpf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(co) for co in country_file],
      'listscoreefmain': final_ef_main,
      'listscoreef': final_other_ef_main,
-     '%graphef': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(co) for co in df['countries'].unique()],
-     '%graphscorehf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(co) for co in df['countries'].unique()],
-     '%graphrankinghf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphRank{}.csv'.format(co) for co in df['countries'].unique()],
+     '%graphef': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphEF/{}.csv'.format(co) for co in country_file],
+     '%graphscorehf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphHF/{}.csv'.format(co) for co in country_file],
+     '%graphrankinghf': ['/Users/guillermina/Dropbox/Human Freedom Index/2020/Data/GraphRank/{}.csv'.format(co) for co in country_file],
      'yearsmain2018': list_score_pf_main_page2[0],
      'yearsmain2017': list_score_pf_main_page2[1],
      'yearsmain2016': list_score_pf_main_page2[2],
@@ -379,5 +401,6 @@ d = {'countryname': country_name,
 # create dataframe
 df_final = pd.DataFrame(d)
 df_final.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)
+df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')
