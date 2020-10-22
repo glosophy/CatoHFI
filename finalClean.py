@@ -17,5 +17,13 @@ ranking_cols = ['ranking2018', 'ranking2017', 'ranking2016', 'ranking2015', 'ran
 # replace 'nan' with '-'
 df[str_columns] = df[str_columns].replace('nan', '-', regex=True)
 
+# remove decimal point from rankings
+for i in ranking_cols:
+    for j in df[i]:
+        if j == '-':
+            pass
+        else:
+            str('{:.0f}'.format(float(j)))
+
 
 df.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)
