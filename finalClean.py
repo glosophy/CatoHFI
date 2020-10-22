@@ -11,8 +11,11 @@ str_columns = ['listscorepfmain', 'listscorepf', 'listscoreefmain', 'listscoreef
                'dscore2017', 'dscore2016', 'dscore2015', 'dscore2014', 'dscore2013', 'dscore2012', 'dscore2011',
                'dscore2010', 'dscore2009', 'dscore2008']
 
+ranking_cols = ['ranking2018', 'ranking2017', 'ranking2016', 'ranking2015', 'ranking2014', 'ranking2013',
+                'ranking2012', 'ranking2011', 'ranking2010', 'ranking2009', 'ranking2008']
 
 # replace 'nan' with '-'
 df[str_columns] = df[str_columns].replace('nan', '-', regex=True)
+
 
 df.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)

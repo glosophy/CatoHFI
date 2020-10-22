@@ -109,19 +109,19 @@ for i in country:
 # create list with final ef and pf values (main categories)
 final_pf_main = []
 for i in list_score_pf_main:
-    a = str(i[0]) + '\n'*4 + str(i[1]) + '\n'*4 + str(i[2]) + '\n'*4 + str(i[3]) + '\n'*5 + str(i[4]) + '\n'*6 \
-        + str(i[5]) + '\n'*7 + str(i[6])
+    a = str(i[0]) + '\n'*5 + str(i[1]) + '\n'*5 + str(i[2]) + '\n'*5 + str(i[3]) + '\n'*6 + str(i[4]) + '\n'*7 \
+        + str(i[5]) + '\n'*8 + str(i[6])
     final_pf_main.append(a)
 
 final_ef_main = []
 for j in list_score_ef_main:
-    a = str(j[0]) + '\n'*6 + str(j[1]) + '\n'*9 + str(j[2]) + '\n'*5 + str(j[3]) + '\n'*3 + str(j[4])
+    a = str(j[0]) + '\n'*7 + str(j[1]) + '\n'*10 + str(j[2]) + '\n'*6 + str(j[3]) + '\n'*6 + str(j[4])
     final_ef_main.append(a)
 
 # create a list with final ef and pf value (other categories)
 final_other_ef_main = []
 for i in list_score_other_ef_main:
-    a = '\n'*2 + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n' + str(i[3]) + '\n' + str(i[4]) + '\n'*3 + \
+    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n' + str(i[3]) + '\n' + str(i[4]) + '\n'*3 + \
         str(i[5]) + '\n' + str(i[6]) + '\n' + str(i[7]) + '\n' + str(i[8]) + '\n' + str(i[9]) + '\n' + str(i[10]) + \
         '\n' + str(i[11]) + '\n' + str(i[12]) + '\n'*3 + \
         str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n'*3 + \
@@ -131,7 +131,7 @@ for i in list_score_other_ef_main:
 
 final_other_pf_main = []
 for i in list_score_other_pf_main:
-    a = '\n'*2 + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n'*3 + \
+    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n'*3 + \
         str(i[3]) + '\n' + str(i[4]) + '\n' + str(i[5]) + '\n'*3 + \
         str(i[6]) + '\n' + str(i[7]) + '\n' + str(i[8]) + '\n'*3 + \
         str(i[9]) + '\n' + str(i[10]) + '\n' + str(i[11]) + '\n' + str(i[12]) + '\n'*3 + \
@@ -157,7 +157,7 @@ for co in range(len(country)):
     pos = [4, 9, 14, 20, 27, 35]
     acc = 0
     for i in range(len(pos)):
-        pf.insert(pos[i] + acc, 0)
+        pf.insert(pos[i], 0)
         acc += 1
     w = pd.DataFrame(pf)
     w.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/GraphPF/{}.csv'.format(country_file[co]),
@@ -251,8 +251,8 @@ for k in df['year'].unique():
 
     years_pf_pf = []
     for m in pf:
-        a = str(m[0]) + '\n'*4 + str(m[1]) + '\n'*4 + str(m[2]) + '\n'*4 + str(m[3]) + '\n'*5 + str(m[4]) + '\n'*6 \
-            + str(m[5]) + '\n'*7 + str(m[6])
+        a = str(m[0]) + '\n'*5 + str(m[1]) + '\n'*5 + str(m[2]) + '\n'*5 + str(m[3]) + '\n'*6 + str(m[4]) + '\n'*7 \
+            + str(m[5]) + '\n'*8 + str(m[6])
         years_pf_pf.append(a)
 
     years_other_other = []
@@ -319,7 +319,7 @@ for i in df['year'].unique():
     midstep2 = []
     for k in country:
         x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank'].values[0]
-        midstep2.append(x)
+        midstep2.append(str('{:.0f}'.format(float(x))))
     rank_years.append(midstep2)
 
 
@@ -400,7 +400,7 @@ d = {'countryname': country_name,
 
 # create dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)
+# df_final.to_csv('/Users/glosophy/Dropbox/Human Freedom Index/2020/Data/final.csv', index=False)
 df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')
