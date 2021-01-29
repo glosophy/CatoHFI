@@ -37,8 +37,22 @@ print('Unique values in Medical column:')
 print(df['Medical'].unique())
 print('---------'*7)
 
-pattern = r'\[.*?\]'
+# clean strings
+pattern = r'\[[^()]*\]'
+recreational = []
 for i in df['Recreational']:
     i = re.sub(pattern, '', i)
+    i = i.replace('\xa0', '')
+    i = i.replace('Un\xadknown', '')
+    recreational.append(i)
+df['Recreational'] = recreational
 
-print(df['Recreational'].unique())
+
+medical = []
+for i in df['Medical']:
+    i = re.sub(pattern, '', i)
+    i = i.replace('\xa0', '')
+    i = i.replace('Un\xadknown', '')
+    medical.append(i)
+df['Medical'] = medical
+
