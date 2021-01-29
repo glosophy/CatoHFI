@@ -43,7 +43,7 @@ recreational = []
 for i in df['Recreational']:
     i = re.sub(pattern, '', i)
     i = i.replace('\xa0', '')
-    i = i.replace('Un\xadknown', '')
+    i = i.replace('Un\xadknown', 'Unknown')
     recreational.append(i)
 df['Recreational'] = recreational
 
@@ -52,7 +52,8 @@ medical = []
 for i in df['Medical']:
     i = re.sub(pattern, '', i)
     i = i.replace('\xa0', '')
-    i = i.replace('Un\xadknown', '')
+    i = i.replace('Un\xadknown', 'Unknown')
     medical.append(i)
 df['Medical'] = medical
 
+df.to_csv('CannabisData.csv')
