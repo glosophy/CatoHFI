@@ -310,3 +310,23 @@ plt.title('Religion in MENA, North America, and South Asia')
 plt.xlabel('Year')
 plt.ylabel('Score')
 plt.show()
+
+# Overall categories + Regions
+religion = selected_df.groupby(['year'])['pf_religion'].mean()
+cat_by_region = selected_df.groupby(['year', 'region'])['pf_religion'].mean().reset_index()
+cat_pivot = cat_by_region.pivot(index='year', columns='region', values='pf_religion')
+
+for i in main_categories:
+    religion = selected_df.groupby(['year'])[i].mean()
+    cat_by_region = selected_df.groupby(['year', 'region'])[i].mean().reset_index()
+    cat_pivot = cat_by_region.pivot(index='year', columns='region', values=i)
+
+    for j in regions:
+        a = np.array(cat_pivot[j])
+        plt.plot(range(2008, 2020), a, label=j)
+    religion.plot(label='Overall {0}'.format(i))
+    plt.legend(title='{0} Score'.format(i), bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.title('{0} by Region'.format(i))
+    plt.xlabel('Year')
+    plt.ylabel('Score')
+    plt.show()
