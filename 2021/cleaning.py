@@ -230,7 +230,7 @@ print('-' * 25)
 print("Women's Freedoms (2008-2019):")
 for i in range(len(regions)):
     a2008 = selected_df.loc[(selected_df['year'] == 2008) & (selected_df['region'] == regions[i]), 'pf_womens']
-    a2019 = selected_df.loc[(selected_df['year'] == 2018) & (selected_df['region'] == regions[i]), 'pf_womens']
+    a2019 = selected_df.loc[(selected_df['year'] == 2019) & (selected_df['region'] == regions[i]), 'pf_womens']
     a2008 = round(np.mean(np.array(a2008)), 2)
     a2019 = round(np.mean(np.array(a2019)), 2)
     diff_score = a2019 - a2008
