@@ -294,19 +294,19 @@ for i in range(len(regions)):
     plt.ylabel('Density')
     plt.show()
 
-# Overall religion + Regions: North America, South Asia, and MENA
-religion_region = ['Middle East & North Africa', 'North America', 'South Asia']
+# Overall freedom of expression + Regions: MENA, Eastern Europe, and Sub-Saharan Africa
+religion_region = ['Middle East & North Africa', 'Eastern Europe', 'Sub-Saharan Africa']
 
-religion = selected_df.groupby(['year'])['pf_religion'].mean()
-cat_by_region = selected_df.groupby(['year', 'region'])['pf_religion'].mean().reset_index()
-cat_pivot = cat_by_region.pivot(index='year', columns='region', values='pf_religion')
+religion = selected_df.groupby(['year'])['pf_expression'].mean()
+cat_by_region = selected_df.groupby(['year', 'region'])['pf_expression'].mean().reset_index()
+cat_pivot = cat_by_region.pivot(index='year', columns='region', values='pf_expression')
 
 for i in religion_region:
     a = np.array(cat_pivot[i])
     plt.plot(range(2008, 2020), a, label=i)
-religion.plot(label='Overall Religion')
-plt.legend(title='Religion Score', bbox_to_anchor=(1.05, 1), loc='upper left')
-plt.title('Religion in MENA, North America, and South Asia')
+religion.plot(label='World Expression')
+plt.legend(title='Expression Score', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.title('Freedom of Expression in MENA, Eastern Europe, and Sub-Saharan Africa')
 plt.xlabel('Year')
 plt.ylabel('Score')
 plt.show()
