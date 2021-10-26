@@ -40,13 +40,28 @@ columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
            'pf_identity_inheritance_widows', 'pf_identity_inheritance_daughters', 'pf_identity_inheritance',
            'pf_identity',
            'pf_score', 'pf_rank', 'pf_womens',
-           'ef_size', 'ef_property', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score', 'ef_rank']
+           'ef_government_consumption', 'ef_government_transfers', 'ef_government_enterprises',
+           'ef_government_tax_income', 'ef_government_tax_payroll', 'ef_government_tax', 'ef_government_soa', 'ef_government',
+           'ef_legal_judicial', 'ef_legal_courts', 'ef_legal_protection', 'ef_legal_military', 'ef_legal_integrity',
+           'ef_legal_enforcement', 'ef_legal_regulatory', 'ef_legal_police', 'ef_legal',
+           'ef_money_growth', 'ef_money_sd', 'ef_money_inflation', 'ef_money_currency', 'ef_money',
+           'ef_trade_tariffs_revenue', 'ef_trade_tariffs_mean', 'ef_trade_tariffs_sd', 'ef_trade_tariffs',
+           'ef_trade_regulatory_nontariff', 'ef_trade_regulatory_compliance', 'ef_trade_regulatory',
+           'ef_trade_black', 'ef_trade_movement_foreign', 'ef_trade_movement_capital', 'ef_trade_movement_visit',
+           'ef_trade_movement', 'ef_trade',
+           'ef_regulation_credit_ownership', 'ef_regulation_credit_private',
+           'ef_regulation_credit_interest', 'ef_regulation_credit', 'ef_regulation_labor_minwage',
+           'ef_regulation_labor_firing', 'ef_regulation_labor_bargain', 'ef_regulation_labor_hours',
+           'ef_regulation_labor_dismissal', 'ef_regulation_labor_conscription', 'ef_regulation_labor',
+           'ef_regulation_business_adm', 'ef_regulation_business_bureaucracy', 'ef_regulation_business_start',
+           'ef_regulation_business_bribes', 'ef_regulation_business_licensing', 'ef_regulation_business_compliance',
+           'ef_regulation_business', 'ef_regulation', 'ef_score', 'ef_rank']
 
 # assign columns to df
 df.columns = columns
 
 # clean up the '-' and turn into numeric
-df = df.replace(to_replace='-', value='')
+df = df.replace(to_replace=['-', ' '], value='')
 cols = df.columns.drop(['year', 'countries', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
 
@@ -243,8 +258,8 @@ region_pivot = by_region.pivot(index='year', columns='region', values='hf_score'
 region_pivot.to_csv('regions.csv', index=False)
 
 main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-                   'pf_identity', 'pf_score', 'ef_size',
-                   'ef_property', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+                   'pf_identity', 'pf_score', 'ef_government',
+                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
 
 cat_df = []
 for i in main_categories:
