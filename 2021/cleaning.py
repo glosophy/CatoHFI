@@ -62,6 +62,7 @@ df.columns = columns
 
 # clean up the '-' and turn into numeric
 df = df.replace(to_replace=['-', ' '], value='')
+df = df.replace(np.nan, '-')
 cols = df.columns.drop(['year', 'countries', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
 
@@ -72,6 +73,8 @@ countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia',
 regions = ['Latin America & the Caribbean', 'Sub-Saharan Africa', 'Middle East & North Africa',
            'Caucasus & Central Asia', 'Eastern Europe', 'South Asia', 'Western Europe', 'East Asia',
            'Oceania', 'North America']
+
+print(df['countries'].unique())
 
 # selecting rows based on condition | ~ is not in
 selected_df = df[~df['countries'].isin(countries)]
