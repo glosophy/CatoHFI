@@ -62,7 +62,6 @@ df.columns = columns
 
 # clean up the '-' and turn into numeric
 df = df.replace(to_replace=['-', ' '], value='')
-df = df.replace(np.nan, '-')
 cols = df.columns.drop(['year', 'countries', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
 

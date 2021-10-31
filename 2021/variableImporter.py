@@ -12,7 +12,7 @@ main_ef = ['ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation']
 other_cat_pf = ['pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal',
                 'pf_ss_homicide', 'pf_ss_disappearances',
                 'pf_movement_vdem', 'pf_movement_cld',
-                'pf_religion_suppression', 'pf_religion_freedom',
+                'pf_religion_freedom', 'pf_religion_suppression',
                 'pf_assembly_entry', 'pf_assembly_freedom', 'pf_assembly_parties', 'pf_assembly_civil',
                 'pf_expression_killed', 'pf_expression_jailed', 'pf_expression_media', 'pf_expression_cultural',
                 'pf_expression_gov', 'pf_expression_internet', 'pf_expression_harass', 'pf_expression_selfcens',
@@ -35,7 +35,7 @@ all_pf = ['pf_rol', 'pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal',
           'pf_expression', 'pf_expression_killed', 'pf_expression_jailed', 'pf_expression_media',
           'pf_expression_cultural', 'pf_expression_gov', 'pf_expression_internet', 'pf_expression_harass',
           'pf_expression_selfcens', 'pf_expression_freedom',
-          'pf_identity', 'pf_identity_same', 'pf_identity_divorce', 'pf_identity_fgm', 'pf_identity_inheritance']
+          'pf_identity', 'pf_identity_same', 'pf_identity_divorce', 'pf_identity_inheritance', 'pf_identity_fgm']
 
 all_ef = ['ef_government', 'ef_government_consumption', 'ef_government_transfers', 'ef_government_enterprises',
           'ef_government_tax', 'ef_government_soa', 'ef_legal', 'ef_legal_judicial', 'ef_legal_courts',
@@ -85,7 +85,9 @@ pfscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'pf_s
 efscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'ef_score']] # two decimal points
 
 decimals = 1
-df[df.columns[~df.columns.isin(['countries', 'region', 'year'])]] = df[df.columns[~df.columns.isin(['countries', 'region', 'year'])]].apply(lambda x: round(x, decimals))
+df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]] = df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]].apply(lambda x: round(x, decimals))
+
+df['hf_rank'] = pd.to_numeric(df['hf_rank'], downcast="integer")
 
 # personal and economic freedom categories
 list_score_pf_main = []
@@ -176,6 +178,7 @@ for co in range(len(country)):
         pf.insert(pos[i], 0)
         acc += 1
     w = pd.DataFrame(pf)
+    w = w.fillna(0) # fillna with 0 for the bar chart
     w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
@@ -186,6 +189,7 @@ for co in range(len(country)):
         ef.insert(pos[i] + acc, 0)
         acc += 1
     w = pd.DataFrame(ef)
+    w = w.fillna(0)  # fillna with 0 for the bar chart
     w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
