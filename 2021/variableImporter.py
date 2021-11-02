@@ -74,9 +74,7 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Austral
                 'UnitedStates', 'Uruguay', 'Venezuela', 'Vietnam', 'Yemen',
                 'Zambia', 'Zimbabwe']
 
-
 #
-
 hf_nu = df[df['hf_score'].isnull()].index.tolist()
 print(hf_nu)
 countries_nu = []
@@ -111,26 +109,22 @@ for i in range(len(hf_nu)):
                 df["pf_score"][k] = np.nan
                 # print(df[all_pf[j]][k])
 
-
 print(df["pf_rol"])
-
-
-
 
 country = df['countries'].unique()
 country_name = [i.upper() for i in country]
 region = [i.upper() for i in df.loc[df['year'] == 2019, 'region']]
 ranking2019 = [int(i) for i in df.loc[df['year'] == 2019, 'hf_rank']]
-hfscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'hf_score']] # two decimal points
-rankingpf = [(str(int(i))+'/165') for i in df.loc[df['year'] == 2019, 'pf_rank']]
-rankingef = [(str(int(i))+'/165') for i in df.loc[df['year'] == 2019, 'ef_rank']]
-pfscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'pf_score']] # two decimal points
-efscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'ef_score']] # two decimal points
-
-
+hfscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'hf_score']]  # two decimal points
+rankingpf = [(str(int(i)) + '/165') for i in df.loc[df['year'] == 2019, 'pf_rank']]
+rankingef = [(str(int(i)) + '/165') for i in df.loc[df['year'] == 2019, 'ef_rank']]
+pfscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'pf_score']]  # two decimal points
+efscore2019 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2019, 'ef_score']]  # two decimal points
 
 decimals = 1
-df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]] = df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]].apply(lambda x: round(x, decimals))
+df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]] = df[
+    df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_score', 'pf_score', 'ef_score'])]].apply(
+    lambda x: round(x, decimals))
 
 df['hf_rank'] = pd.to_numeric(df['hf_rank'], downcast="integer")
 
@@ -179,29 +173,28 @@ for j in list_score_ef_main:
     a = str(j[0]) + '\n' * 7 + str(j[1]) + '\n' * 10 + str(j[2]) + '\n' * 6 + str(j[3]) + '\n' * 6 + str(j[4])
     final_ef_main.append(a)
 
-
 # create a list with final ef and pf value (other categories)
 final_other_ef_main = []
 for i in list_score_other_ef_main:
-    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n' + str(i[3]) + '\n' + str(i[4]) + '\n'*3 + \
+    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n' + str(i[3]) + '\n' + str(i[4]) + '\n' * 3 + \
         str(i[5]) + '\n' + str(i[6]) + '\n' + str(i[7]) + '\n' + str(i[8]) + '\n' + str(i[9]) + '\n' + str(i[10]) + \
-        '\n' + str(i[11]) + '\n' + str(i[12]) + '\n'*3 + \
-        str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n'*3 + \
-        str(i[17]) + '\n' + str(i[18]) + '\n' + str(i[19]) + '\n' + str(i[20]) + '\n'*3 + \
+        '\n' + str(i[11]) + '\n' + str(i[12]) + '\n' * 3 + \
+        str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n' * 3 + \
+        str(i[17]) + '\n' + str(i[18]) + '\n' + str(i[19]) + '\n' + str(i[20]) + '\n' * 3 + \
         str(i[21]) + '\n' + str(i[22]) + '\n' + str(i[23])
     final_other_ef_main.append(a)
 
 final_other_pf_main = []
 for i in list_score_other_pf_main:
-    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n'*3 + \
-        str(i[3]) + '\n' + str(i[4]) + '\n'*3 + \
-        str(i[5]) + '\n' + str(i[6]) + '\n'*3 + \
-        str(i[7]) + '\n' + str(i[8]) + '\n'*3 + \
-        str(i[9]) + '\n' + str(i[10]) + '\n' + str(i[11]) + '\n' + str(i[12]) + '\n'*3 + \
-        str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n' + str(i[17]) + '\n' + str(i[18]) + '\n' + str(i[19]) + '\n' + str(i[20]) + '\n' + str(i[21]) + '\n'*3 + \
+    a = '\n' + str(i[0]) + '\n' + str(i[1]) + '\n' + str(i[2]) + '\n' * 3 + \
+        str(i[3]) + '\n' + str(i[4]) + '\n' * 3 + \
+        str(i[5]) + '\n' + str(i[6]) + '\n' * 3 + \
+        str(i[7]) + '\n' + str(i[8]) + '\n' * 3 + \
+        str(i[9]) + '\n' + str(i[10]) + '\n' + str(i[11]) + '\n' + str(i[12]) + '\n' * 3 + \
+        str(i[13]) + '\n' + str(i[14]) + '\n' + str(i[15]) + '\n' + str(i[16]) + '\n' + str(i[17]) + '\n' + str(
+        i[18]) + '\n' + str(i[19]) + '\n' + str(i[20]) + '\n' + str(i[21]) + '\n' * 3 + \
         str(i[22]) + '\n' + str(i[23]) + '\n' + str(i[24]) + '\n' + str(i[25])
     final_other_pf_main.append(a)
-
 
 # graph pf and ef
 for co in range(len(country)):
@@ -223,8 +216,8 @@ for co in range(len(country)):
         pf.insert(pos[i], 0)
         acc += 1
     w = pd.DataFrame(pf)
-    w = w.fillna(0) # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
+    w = w.fillna(0)  # fillna with 0 for the bar chart
+    w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
     # economic freedom
@@ -235,9 +228,8 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
-
 
 # human freedom chart - order: country, world, region
 selected = pd.read_csv('selected_countries.csv')
@@ -249,7 +241,6 @@ for i in selected['year'].unique():
     world_avg.append(mean)
 
 world_avg = world_avg[::-1]
-
 
 # score countries
 countries_score = []
@@ -270,15 +261,13 @@ for i in df['countries'].unique():
     country_hf = country_hf[::-1]
     countries_score.append(country_hf)
 
-
 for i in range(len(country)):
-    hf_graph = {'hf':countries_score[i],
+    hf_graph = {'hf': countries_score[i],
                 'world': world_avg,
-                'reg':region_score[i]}
+                'reg': region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
-    graph_df.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(country_file[i]),
+    graph_df.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(country_file[i]),
                     index=False, header=False)
-
 
 # ranking graph
 for i in range(len(country)):
@@ -288,9 +277,8 @@ for i in range(len(country)):
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(country_file[i]),
+    w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
-
 
 # main years second page
 list_score_pf_main_page2 = []
@@ -316,24 +304,24 @@ for k in df['year'].unique():
     years_pf_pf = []
     for m in pf:
         a = str(m[0]) + '\n' * 5 + str(m[1]) + '\n' * 4 + str(m[2]) + '\n' * 4 + str(m[3]) + '\n' * 4 + str(
-        m[4]) + '\n' * 6 \
-        + str(m[5]) + '\n' * 11 + str(m[6])
+            m[4]) + '\n' * 6 \
+            + str(m[5]) + '\n' * 11 + str(m[6])
         years_pf_pf.append(a)
 
     years_other_other = []
     for n in other_pf:
-        b = str(n[0]) + '\n' + str(n[1]) + '\n' + str(n[2]) + '\n'*3 + \
-        str(n[3]) + '\n' + str(n[4]) + '\n'*3 + \
-        str(n[5]) + '\n' + str(n[6]) + '\n'*3 + \
-        str(n[7]) + '\n' + str(n[8]) + '\n'*3 + \
-        str(n[9]) + '\n' + str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n'*3 + \
-        str(n[13]) + '\n' + str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' + str(n[18]) + '\n' + str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n'*3 + \
-        str(n[22]) + '\n' + str(n[23]) + '\n' + str(n[24]) + '\n' + str(n[25])
+        b = str(n[0]) + '\n' + str(n[1]) + '\n' + str(n[2]) + '\n' * 3 + \
+            str(n[3]) + '\n' + str(n[4]) + '\n' * 3 + \
+            str(n[5]) + '\n' + str(n[6]) + '\n' * 3 + \
+            str(n[7]) + '\n' + str(n[8]) + '\n' * 3 + \
+            str(n[9]) + '\n' + str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n' * 3 + \
+            str(n[13]) + '\n' + str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' + str(
+            n[18]) + '\n' + str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n' * 3 + \
+            str(n[22]) + '\n' + str(n[23]) + '\n' + str(n[24]) + '\n' + str(n[25])
         years_other_other.append(b)
 
     list_score_pf_main_page2.append(years_pf_pf)
     list_score_other_pf_main_page2.append(years_other_other)
-
 
 # score country by year
 score_year = []
@@ -345,7 +333,6 @@ for k in df['year'].unique():
         score.append('{:.2f}'.format(x))
     score_year.append(score)
 
-
 # ranking by year
 rank_year = []
 for k in df['year'].unique():
@@ -355,7 +342,6 @@ for k in df['year'].unique():
         x = float(x)
         rank.append('{:.2f}'.format(x))
     rank_year.append(rank)
-
 
 # dscores:
 dscore = []
@@ -378,7 +364,6 @@ for i in df['year'].unique():
         midstep.append(str('{:.2f}'.format(float(x))))
     scores.append(midstep)
 
-
 rank_years = []
 for i in df['year'].unique():
     midstep2 = []
@@ -386,7 +371,6 @@ for i in df['year'].unique():
         x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank'].values[0]
         midstep2.append(str('{:.0f}'.format(float(x))))
     rank_years.append(midstep2)
-
 
 # create dictionary with all variables
 d = {'countryname': country_name,
@@ -400,12 +384,16 @@ d = {'countryname': country_name,
      'scoreef': efscore2019,
      'listscorepfmain': final_pf_main,
      'listscorepf': final_other_pf_main,
-     '%graphpf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(co) for co in country_file],
+     '%graphpf': ['/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(co) for co in
+                  country_file],
      'listscoreefmain': final_ef_main,
      'listscoreef': final_other_ef_main,
-     '%graphef': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(co) for co in country_file],
-     '%graphscorehf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(co) for co in country_file],
-     '%graphrankinghf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(co) for co in country_file],
+     '%graphef': ['/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(co) for co in
+                  country_file],
+     '%graphscorehf': ['/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(co) for co in
+                       country_file],
+     '%graphrankinghf': ['/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(co) for co in
+                         country_file],
      'main2019': list_score_pf_main_page2[0],
      'main2018': list_score_pf_main_page2[1],
      'main2017': list_score_pf_main_page2[2],
@@ -467,10 +455,9 @@ d = {'countryname': country_name,
      'ranking2009': rank_years[10],
      'ranking2008': rank_years[11]}
 
-
 # create Dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/final.csv', index=False)
+df_final.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/final.csv', index=False)
 df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')
