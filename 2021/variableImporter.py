@@ -108,6 +108,7 @@ for i in range(len(hf_nu)):
 
             if df["countries"][k] == countries_nu[i] and df["year"][k] <= years_nu[i]:
                 df[all_pf[j]][k] = np.nan
+                df["pf_score"][k] = np.nan
                 # print(df[all_pf[j]][k])
 
 
@@ -223,7 +224,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(pf)
     w = w.fillna(0) # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphPF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
     # economic freedom
@@ -234,7 +235,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphEF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
 
@@ -275,7 +276,7 @@ for i in range(len(country)):
                 'world': world_avg,
                 'reg':region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
-    graph_df.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphHF/{}.csv'.format(country_file[i]),
+    graph_df.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(country_file[i]),
                     index=False, header=False)
 
 
@@ -287,7 +288,7 @@ for i in range(len(country)):
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphRank/{}.csv'.format(country_file[i]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
 
@@ -399,12 +400,12 @@ d = {'countryname': country_name,
      'scoreef': efscore2019,
      'listscorepfmain': final_pf_main,
      'listscorepf': final_other_pf_main,
-     '%graphpf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphPF/{}.csv'.format(co) for co in country_file],
+     '%graphpf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(co) for co in country_file],
      'listscoreefmain': final_ef_main,
      'listscoreef': final_other_ef_main,
-     '%graphef': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphEF/{}.csv'.format(co) for co in country_file],
-     '%graphscorehf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphHF/{}.csv'.format(co) for co in country_file],
-     '%graphrankinghf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/GraphRank/{}.csv'.format(co) for co in country_file],
+     '%graphef': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(co) for co in country_file],
+     '%graphscorehf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphHF/{}.csv'.format(co) for co in country_file],
+     '%graphrankinghf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/GraphRank/{}.csv'.format(co) for co in country_file],
      'main2019': list_score_pf_main_page2[0],
      'main2018': list_score_pf_main_page2[1],
      'main2017': list_score_pf_main_page2[2],
@@ -469,7 +470,7 @@ d = {'countryname': country_name,
 
 # create Dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Datacopy/final.csv', index=False)
+df_final.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2021/Data/final.csv', index=False)
 df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')
