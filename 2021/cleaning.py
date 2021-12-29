@@ -19,7 +19,7 @@ for i in df.columns:
         df = df.drop(columns=[i])
 print('Clean shape:', df.shape)
 
-columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
+columns = ['year', 'countries', 'ISO', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
            'pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal', 'pf_rol_wgi', 'pf_rol',
            'pf_ss_homicide', 'pf_ss_disappearances_disap', 'pf_ss_disappearances_violent',
            'pf_ss_disappearances_organized',
@@ -62,7 +62,7 @@ df.columns = columns
 
 # clean up the '-' and turn into numeric
 df = df.replace(to_replace=['-', ' '], value='')
-cols = df.columns.drop(['year', 'countries', 'region'])
+cols = df.columns.drop(['year', 'countries', 'ISO', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
 
 countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini',
