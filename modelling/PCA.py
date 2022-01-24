@@ -6,7 +6,7 @@ df = pd.read_csv('./../2021/all_countries.csv')
 
 # keep category columns
 columns = ['year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-           'pf_identity', 'ef_size', 'ef_property', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score']
+           'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score']
 
 pca = df[columns]
 
@@ -15,7 +15,7 @@ pca = pca.dropna()
 
 # PCA
 features = ['pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-            'pf_identity', 'ef_size', 'ef_property', 'ef_money', 'ef_trade', 'ef_regulation']
+            'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation']
 
 # Separate data into Y and X
 y = pca['hf_score']
