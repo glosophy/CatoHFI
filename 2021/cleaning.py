@@ -19,7 +19,7 @@ for i in df.columns:
         df = df.drop(columns=[i])
 print('Clean shape:', df.shape)
 
-columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
+columns = ['year', 'countries', 'ISO', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
            'pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal', 'pf_rol_wgi', 'pf_rol',
            'pf_ss_homicide', 'pf_ss_disappearances_disap', 'pf_ss_disappearances_violent',
            'pf_ss_disappearances_organized',
@@ -40,14 +40,29 @@ columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
            'pf_identity_inheritance_widows', 'pf_identity_inheritance_daughters', 'pf_identity_inheritance',
            'pf_identity',
            'pf_score', 'pf_rank', 'pf_womens',
-           'ef_size', 'ef_property', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score', 'ef_rank']
+           'ef_government_consumption', 'ef_government_transfers', 'ef_government_enterprises',
+           'ef_government_tax_income', 'ef_government_tax_payroll', 'ef_government_tax', 'ef_government_soa', 'ef_government',
+           'ef_legal_judicial', 'ef_legal_courts', 'ef_legal_protection', 'ef_legal_military', 'ef_legal_integrity',
+           'ef_legal_enforcement', 'ef_legal_regulatory', 'ef_legal_police', 'ef_legal',
+           'ef_money_growth', 'ef_money_sd', 'ef_money_inflation', 'ef_money_currency', 'ef_money',
+           'ef_trade_tariffs_revenue', 'ef_trade_tariffs_mean', 'ef_trade_tariffs_sd', 'ef_trade_tariffs',
+           'ef_trade_regulatory_nontariff', 'ef_trade_regulatory_compliance', 'ef_trade_regulatory',
+           'ef_trade_black', 'ef_trade_movement_foreign', 'ef_trade_movement_capital', 'ef_trade_movement_visit',
+           'ef_trade_movement', 'ef_trade',
+           'ef_regulation_credit_ownership', 'ef_regulation_credit_private',
+           'ef_regulation_credit_interest', 'ef_regulation_credit', 'ef_regulation_labor_minwage',
+           'ef_regulation_labor_firing', 'ef_regulation_labor_bargain', 'ef_regulation_labor_hours',
+           'ef_regulation_labor_dismissal', 'ef_regulation_labor_conscription', 'ef_regulation_labor',
+           'ef_regulation_business_adm', 'ef_regulation_business_bureaucracy', 'ef_regulation_business_start',
+           'ef_regulation_business_bribes', 'ef_regulation_business_licensing', 'ef_regulation_business_compliance',
+           'ef_regulation_business', 'ef_regulation', 'ef_score', 'ef_rank']
 
 # assign columns to df
 df.columns = columns
 
 # clean up the '-' and turn into numeric
-df = df.replace(to_replace='-', value='')
-cols = df.columns.drop(['year', 'countries', 'region'])
+df = df.replace(to_replace=['-', ' '], value='')
+cols = df.columns.drop(['year', 'countries', 'ISO', 'region'])
 df[cols] = df[cols].apply(pd.to_numeric)
 
 countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini',
@@ -57,6 +72,8 @@ countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia',
 regions = ['Latin America & the Caribbean', 'Sub-Saharan Africa', 'Middle East & North Africa',
            'Caucasus & Central Asia', 'Eastern Europe', 'South Asia', 'Western Europe', 'East Asia',
            'Oceania', 'North America']
+
+print(df['countries'].unique())
 
 # selecting rows based on condition | ~ is not in
 selected_df = df[~df['countries'].isin(countries)]
@@ -243,8 +260,8 @@ region_pivot = by_region.pivot(index='year', columns='region', values='hf_score'
 region_pivot.to_csv('regions.csv', index=False)
 
 main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-                   'pf_identity', 'pf_score', 'ef_size',
-                   'ef_property', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+                   'pf_identity', 'pf_score', 'ef_government',
+                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
 
 cat_df = []
 for i in main_categories:
@@ -294,19 +311,19 @@ for i in range(len(regions)):
     plt.ylabel('Density')
     plt.show()
 
-# Overall religion + Regions: North America, South Asia, and MENA
-religion_region = ['Middle East & North Africa', 'North America', 'South Asia']
+# Overall freedom of expression + Regions: MENA, Eastern Europe, and Sub-Saharan Africa
+religion_region = ['Middle East & North Africa', 'Eastern Europe', 'Sub-Saharan Africa']
 
-religion = selected_df.groupby(['year'])['pf_religion'].mean()
-cat_by_region = selected_df.groupby(['year', 'region'])['pf_religion'].mean().reset_index()
-cat_pivot = cat_by_region.pivot(index='year', columns='region', values='pf_religion')
+religion = selected_df.groupby(['year'])['pf_expression'].mean()
+cat_by_region = selected_df.groupby(['year', 'region'])['pf_expression'].mean().reset_index()
+cat_pivot = cat_by_region.pivot(index='year', columns='region', values='pf_expression')
 
 for i in religion_region:
     a = np.array(cat_pivot[i])
     plt.plot(range(2008, 2020), a, label=i)
-religion.plot(label='Overall Religion')
-plt.legend(title='Religion Score', bbox_to_anchor=(1.05, 1), loc='upper left')
-plt.title('Religion in MENA, North America, and South Asia')
+religion.plot(label='World Expression')
+plt.legend(title='Expression Score', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.title('Freedom of Expression in MENA, Eastern Europe, and Sub-Saharan Africa')
 plt.xlabel('Year')
 plt.ylabel('Score')
 plt.show()
