@@ -21,6 +21,10 @@ features = ['pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_
 y = pca['hf_score']
 X = pca[features]
 
+# Save arrays for future use
+np.save('response', y)
+np.save('features', X)
+
 # Subtract the mean
 X = X - X.mean()
 
