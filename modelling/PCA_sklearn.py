@@ -22,21 +22,35 @@ pca_features = df_pca.drop(['year', 'countries', 'hf_score'], axis=1)
 x = StandardScaler().fit_transform(pca_features)
 
 # Create PCA class anf fit data
-pca = PCA(n_components=4)
+pca = PCA(n_components=12)
 principalComponents = pca.fit_transform(x)
 
+# Eigenvalues
+eigenvalues = pca.explained_variance_
+print('Eigenvalues:', eigenvalues)
+for i in range(len(eigenvalues)):
+    if eigenvalues[i] >= 1:
+        print('Keep {} PC(s)'.format(i + 1))
+print('------' * 7)
+
 # Variance explained by each PC
-for i in range(4):
+for i in range(12):
     print('Variance explained by {} PC:'.format(str(i+1)),
           np.cumsum(pca.explained_variance_ratio_ * 100)[i])
 print('-----' * 7)
 
+# Create new PCA class anf fit data
+pca = PCA(n_components=3)
+principalComponents = pca.fit_transform(x)
+
 # Set df
 principalDf = pd.DataFrame(data=principalComponents,
-                           columns=['PC1', 'PC2', 'PC3', 'PC4'])
+                           columns=['PC1', 'PC2', 'PC3'])
 
 # Concat dfs
 finalDf = pd.concat([principalDf, df_pca[['year', 'countries', 'hf_score']]], axis=1)
+
+finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
 # Export csv
 finalDf.to_csv('PCA.csv')

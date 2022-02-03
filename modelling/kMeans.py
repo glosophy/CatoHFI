@@ -53,15 +53,15 @@ plt.xlabel("Number of Clusters")
 plt.ylabel("Silhouette Coefficient")
 plt.show()
 
+# Start Kmeans class and fit features
 kms = KMeans(n_clusters=4)
-
 kms.fit(scaled_features)
 
+# Create df with cluster groups
 df_kmeans['Cluster'] = kms.labels_
+df_kmeans.to_csv('kmeans.csv')
 
-print(df_kmeans.head())
-
-# Plot blobs
+# Plot blobs for fun
 plt.subplots(figsize=(8, 8))
 sns.scatterplot(x='pf_movement', y='pf_expression', hue='Cluster', data=df_kmeans, markers='*', palette='coolwarm')
 plt.show()
