@@ -75,6 +75,3 @@ Zdata.insert(0, 'Features', features)
 Zdata.columns = ['Features', 'PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9', 'PC10', 'PC11', 'PC12']
 pd.options.display.float_format = "{:,.2f}".format
 
-Zdata.to_csv('./eigenvalues.csv', index=False)
-
-# PCA with scikit-learn
