@@ -69,9 +69,4 @@ plt.xlabel('Principal components')
 plt.ylabel('Proportion of variance')
 plt.show()
 
-# see eigenvalues for each PC
-Zdata = pd.DataFrame(Z_new)
-Zdata.insert(0, 'Features', features)
-Zdata.columns = ['Features', 'PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9', 'PC10', 'PC11', 'PC12']
-pd.options.display.float_format = "{:,.2f}".format
 

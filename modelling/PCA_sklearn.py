@@ -43,6 +43,9 @@ print('-----' * 7)
 pca = PCA(n_components=3)
 principalComponents = pca.fit_transform(x)
 
+single_components = pca.components_
+print(single_components)
+
 # Set df
 principalDf = pd.DataFrame(data=principalComponents,
                            columns=['PC1', 'PC2', 'PC3'])
@@ -52,5 +55,5 @@ finalDf = pd.concat([principalDf, df_pca[['year', 'countries', 'hf_score']]], ax
 
 finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
-# Export csv
-finalDf.to_csv('PCA.csv')
+# # Export csv
+# finalDf.to_csv('PCA.csv')
