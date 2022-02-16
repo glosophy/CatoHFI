@@ -10,7 +10,7 @@ df = pd.read_csv('./../2021/all_countries.csv')
 
 # keep category columns
 columns = ['year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-           'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score']
+           'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score', 'hf_quartile']
 
 df_kmeans = df[columns]
 
@@ -18,7 +18,7 @@ df_kmeans = df[columns]
 df_kmeans = df_kmeans.dropna()
 
 # Select features
-kmeans_features = df_kmeans.drop(['year', 'countries', 'hf_score'], axis=1)
+kmeans_features = df_kmeans.drop(['year', 'countries', 'hf_score', 'hf_quartile'], axis=1)
 
 # Standardize data
 scaler = StandardScaler()
