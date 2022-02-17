@@ -82,5 +82,5 @@ finalDf = pd.concat([principalDf, df_fa[['year', 'countries', 'hf_score', 'hf_qu
 finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
 # Export csv
-finalDf.to_csv('factors.csv')
+finalDf.to_csv('factors.csv', index=False)
 

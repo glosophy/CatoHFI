@@ -59,7 +59,7 @@ kms.fit(scaled_features)
 
 # Create df with cluster groups
 df_kmeans['Cluster'] = kms.labels_
-df_kmeans.to_csv('kmeans.csv')
+df_kmeans.to_csv('kmeans.csv', index=False)
 
 # Plot blobs for fun
 plt.subplots(figsize=(8, 8))
