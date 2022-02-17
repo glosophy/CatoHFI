@@ -53,4 +53,4 @@ finalDf = pd.concat([principalDf, df_pca[['year', 'countries', 'hf_score', 'hf_q
 finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
 # Export csv
-finalDf.to_csv('PCA.csv')
+finalDf.to_csv('PCA.csv', index=False)
