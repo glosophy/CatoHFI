@@ -95,3 +95,16 @@ final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO'
 
 # Export final file
 final.to_csv('modellingFile.csv', index=False)
+
+# Export only columns we need for analysis
+excel = final[['year', 'countries_x', 'ISO', 'latitude', 'longitude',
+               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+               'Social support', 'Healthy life expectancy at birth',
+               'Freedom to make life choices', 'Generosity',
+               'Perceptions of corruption', 'Positive affect', 'Negative affect']]
+
+excel.to_csv('allData.csv', index=False)
