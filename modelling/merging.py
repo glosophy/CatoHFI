@@ -9,7 +9,6 @@ factor = pd.read_csv('factors.csv')
 result = pd.merge(pca, kMeans, how='outer', on=['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'])
 final = pd.merge(result, factor, how='outer', on=['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'])
 
-
 def find_country(country_name):
     try:
         return pycountry.countries.get(name=country_name).alpha_2
@@ -81,3 +80,7 @@ for i in range(len(unique_legalNF)):
     legal.loc[legal['Country'] == unique_legalNF[i], 'ISO2'] = legal_keysNF[i]
 
 final = pd.merge(final, legal, how='left', on=['ISO2'])
+
+
+# Export final file
+final.to_csv('modellingFile.csv', index=False)
