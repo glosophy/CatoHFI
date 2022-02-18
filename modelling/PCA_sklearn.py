@@ -7,7 +7,7 @@ import numpy as np
 df = pd.read_csv('./../2021/all_countries.csv')
 
 # keep category columns
-columns = ['year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
+columns = ['ISO', 'year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
            'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score', 'hf_quartile']
 
 df_pca = df[columns]
@@ -16,7 +16,7 @@ df_pca = df[columns]
 df_pca = df_pca.dropna()
 
 # Select features
-pca_features = df_pca.drop(['year', 'countries', 'hf_score', 'hf_quartile'], axis=1)
+pca_features = df_pca.drop(['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'], axis=1)
 
 # Standardize features
 x = StandardScaler().fit_transform(pca_features)
@@ -48,7 +48,7 @@ principalDf = pd.DataFrame(data=principalComponents,
                            columns=['PC1', 'PC2', 'PC3'])
 
 # Concat dfs
-finalDf = pd.concat([principalDf, df_pca[['year', 'countries', 'hf_score', 'hf_quartile']]], axis=1)
+finalDf = pd.concat([principalDf, df_pca[['ISO', 'year', 'countries', 'hf_score', 'hf_quartile']]], axis=1)
 
 finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 

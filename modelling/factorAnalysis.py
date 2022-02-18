@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 df = pd.read_csv('./../2021/all_countries.csv')
 
 # keep category columns
-columns = ['year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
+columns = ['ISO', 'year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
            'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score', 'hf_quartile']
 
 df_fa = df[columns]
@@ -19,7 +19,7 @@ df_fa = df[columns]
 df_fa = df_fa.dropna()
 
 # Select features
-fa_features = df_fa.drop(['year', 'countries', 'hf_score', 'hf_quartile'], axis=1)
+fa_features = df_fa.drop(['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'], axis=1)
 
 # Evaluate the “factorability” of the data. Can we find the factors in the dataset?
 # Barlett-s Test
@@ -77,7 +77,7 @@ principalDf = pd.DataFrame(data=factors,
                            columns=['F1', 'F2', 'F3'])
 
 # Concat dfs
-finalDf = pd.concat([principalDf, df_fa[['year', 'countries', 'hf_score', 'hf_quartile']]], axis=1)
+finalDf = pd.concat([principalDf, df_fa[['ISO', 'year', 'countries', 'hf_score', 'hf_quartile']]], axis=1)
 
 finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
