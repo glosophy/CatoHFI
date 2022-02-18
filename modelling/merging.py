@@ -9,6 +9,7 @@ factor = pd.read_csv('factors.csv')
 result = pd.merge(pca, kMeans, how='outer', on=['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'])
 final = pd.merge(result, factor, how='outer', on=['ISO', 'year', 'countries', 'hf_score', 'hf_quartile'])
 
+
 def find_country(country_name):
     try:
         return pycountry.countries.get(name=country_name).alpha_2
@@ -81,6 +82,16 @@ for i in range(len(unique_legalNF)):
 
 final = pd.merge(final, legal, how='left', on=['ISO2'])
 
+# Reorder columns
+final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO', 'ISO2', 'latitude', 'longitude',
+               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+               'Social support', 'Healthy life expectancy at birth',
+               'Freedom to make life choices', 'Generosity',
+               'Perceptions of corruption', 'Positive affect', 'Negative affect']]
 
 # Export final file
 final.to_csv('modellingFile.csv', index=False)
