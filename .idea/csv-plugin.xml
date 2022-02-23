@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/2021/selected_countries.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/modelling/eigenvalues.csv">
           <value>
             <Attribute>
