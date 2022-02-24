@@ -82,29 +82,40 @@ for i in range(len(unique_legalNF)):
 
 final = pd.merge(final, legal, how='left', on=['ISO2'])
 
-# Reorder columns
-final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO', 'ISO2', 'latitude', 'longitude',
-               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-               'Social support', 'Healthy life expectancy at birth',
-               'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect']]
 
-# Export final file
-final.to_csv('modellingFile.csv', index=False)
+# Penn data
+penn = pd.read_csv('penn.csv')
 
-# Export only columns we need for analysis
-excel = final[['year', 'countries_x', 'ISO', 'latitude', 'longitude',
-               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-               'Social support', 'Healthy life expectancy at birth',
-               'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect']]
+penn['ISO2'] = penn.apply(lambda row: findalpha2(row.ISO), axis=1)
 
-excel.to_csv('allData.csv', index=False)
+final = pd.merge(final, penn, how='left', on=['ISO2', 'year'])
+
+# Trust data
+trust = pd.read_csv('WVS_TimeSeries_1981_2020_ascii_v2_0.csv')
+
+# # Reorder columns
+# final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO', 'ISO2', 'latitude', 'longitude',
+#                'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+#                'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+#                'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+#                'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+#                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+#                'Social support', 'Healthy life expectancy at birth',
+#                'Freedom to make life choices', 'Generosity',
+#                'Perceptions of corruption', 'Positive affect', 'Negative affect']]
+#
+# # Export final file
+# final.to_csv('modellingFile.csv', index=False)
+#
+# # Export only columns we need for analysis
+# excel = final[['year', 'countries_x', 'ISO', 'latitude', 'longitude',
+#                'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+#                'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+#                'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+#                'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+#                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+#                'Social support', 'Healthy life expectancy at birth',
+#                'Freedom to make life choices', 'Generosity',
+#                'Perceptions of corruption', 'Positive affect', 'Negative affect']]
+#
+# excel.to_csv('allData.csv', index=False)
