@@ -91,7 +91,9 @@ penn['ISO2'] = penn.apply(lambda row: findalpha2(row.ISO), axis=1)
 final = pd.merge(final, penn, how='left', on=['ISO2', 'year'])
 
 # Trust data
-trust = pd.read_csv('WVS_TimeSeries_1981_2020_ascii_v2_0.csv')
+trust = pd.read_csv('trust.csv')
+
+final = pd.merge(final, trust, how='left', on=['ISO', 'year'])
 
 # # Reorder columns
 # final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO', 'ISO2', 'latitude', 'longitude',
