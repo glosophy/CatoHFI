@@ -90,34 +90,48 @@ penn['ISO2'] = penn.apply(lambda row: findalpha2(row.ISO), axis=1)
 
 final = pd.merge(final, penn, how='left', on=['ISO2', 'year'])
 
-# Trust data
-trust = pd.read_csv('trust.csv')
+# gdp data
+gdp = pd.read_csv('gdpPerCap.csv')
 
-final = pd.merge(final, trust, how='left', on=['ISO', 'year'])
+gdp['ISO2'] = gdp.apply(lambda row: find_country(row.country), axis=1)
 
-# # Reorder columns
-# final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO', 'ISO2', 'latitude', 'longitude',
-#                'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-#                'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-#                'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-#                'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-#                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-#                'Social support', 'Healthy life expectancy at birth',
-#                'Freedom to make life choices', 'Generosity',
-#                'Perceptions of corruption', 'Positive affect', 'Negative affect']]
-#
-# # Export final file
-# final.to_csv('modellingFile.csv', index=False)
-#
-# # Export only columns we need for analysis
-# excel = final[['year', 'countries_x', 'ISO', 'latitude', 'longitude',
-#                'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-#                'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-#                'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-#                'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-#                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-#                'Social support', 'Healthy life expectancy at birth',
-#                'Freedom to make life choices', 'Generosity',
-#                'Perceptions of corruption', 'Positive affect', 'Negative affect']]
-#
-# excel.to_csv('allData.csv', index=False)
+list_gdp_NF = gdp.loc[gdp.ISO2 == 'not found', 'country']
+unique_gdp_listNF = list_gdp_NF.unique()
+
+# print(unique_gdp_listNF[49:])
+
+keys_gdp_NF = ['BS', 'BO', 'nan', 'nan', 'CD', 'CG', 'CI', 'nan', 'CZ', 'EG', 'GM', 'HK', 'IR', 'nan', 'KR', 'nan',
+               'KG', 'LA', 'nan', 'nan', 'MD', 'SK', 'nan', 'nan', 'nan', 'nan', 'TZ', 'VE', 'VN', 'nan', 'nan', 'YE']
+
+for i in range(len(keys_gdp_NF)):
+    gdp.loc[gdp['country'] == unique_gdp_listNF[49+i], 'ISO2'] = keys_gdp_NF[i]
+
+final = pd.merge(final, gdp, how='left', on=['ISO2', 'year'])
+
+
+# Reorder columns
+final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO_x', 'ISO_y', 'ISO2', 'latitude', 'longitude',
+               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+               'Social support', 'Healthy life expectancy at birth',
+               'Freedom to make life choices', 'Generosity',
+               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdpPerCap']]
+
+# Export final file
+final.to_csv('modellingFile.csv', index=False)
+
+# Export only columns we need for analysis
+excel = final[['year', 'countries_x', 'ISO_x', 'latitude', 'longitude',
+               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+               'Social support', 'Healthy life expectancy at birth',
+               'Freedom to make life choices', 'Generosity',
+               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdpPerCap']]
+
+excel.to_csv('allData.csv', index=False)
