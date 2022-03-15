@@ -347,3 +347,23 @@ for i in main_categories:
     plt.xlabel('Year')
     plt.ylabel('Score')
     plt.show()
+
+# Biggest drops in Expression, Religion, and Assoc.
+categories_ERA = ['pf_religion', 'pf_expression', 'pf_assembly']
+df_categories = []
+
+for i in categories_ERA:
+    a2008 = selected_df.loc[(selected_df['year'] == 2008), ['countries', 'region', i]]
+    a2008 = a2008.rename(columns={i: '{}_2008'.format(i)})
+    a2019 = selected_df.loc[(selected_df['year'] == 2019), ['countries', 'region', i]]
+    a2019 = a2019.rename(columns={i: '{}_2019'.format(i)})
+
+    diff_df = pd.merge(a2008, a2019, how='left', on=['countries', 'region'])
+
+    diff_df['diff_{}'.format(i)] = diff_df['{}_2019'.format(i)] - diff_df['{}_2008'.format(i)]
+
+    diff_df = diff_df.sort_values(by=['diff_{}'.format(i)])
+
+    # df_categories.append(diff_df)
+
+    diff_df.to_csv('diff_{}.csv'.format(i))
