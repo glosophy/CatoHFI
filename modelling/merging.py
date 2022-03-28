@@ -1,5 +1,6 @@
 import pandas as pd
 import pycountry
+import xlrd
 
 pca = pd.read_csv('PCA.csv')
 kMeans = pd.read_csv('kmeans.csv')
@@ -118,7 +119,7 @@ final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO_
                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
                'Social support', 'Healthy life expectancy at birth',
                'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdpPerCap']]
+               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
 
 # Export final file
 final.to_csv('modellingFile.csv', index=False)
@@ -132,6 +133,6 @@ excel = final[['year', 'countries_x', 'ISO_x', 'latitude', 'longitude',
                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
                'Social support', 'Healthy life expectancy at birth',
                'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdpPerCap']]
+               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
 
 excel.to_csv('allData.csv', index=False)

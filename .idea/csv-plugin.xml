@@ -17,7 +17,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="/modelling/eigenvalues.csv">
+        <entry key="/modelling/gdpPerCap.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
