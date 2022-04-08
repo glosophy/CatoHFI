@@ -65,3 +65,4 @@ df_kmeans.to_csv('kmeans.csv', index=False)
 plt.subplots(figsize=(8, 8))
 sns.scatterplot(x='pf_movement', y='pf_expression', hue='Cluster', data=df_kmeans, markers='*', palette='coolwarm')
 plt.show()
+
