@@ -68,5 +68,3 @@ plt.title('Scree plot')
 plt.xlabel('Principal components')
 plt.ylabel('Proportion of variance')
 plt.show()
-
-
