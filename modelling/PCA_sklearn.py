@@ -54,3 +54,4 @@ finalDf = finalDf.apply(lambda x: pd.Series(x.dropna().values))
 
 # Export csv
 finalDf.to_csv('PCA.csv', index=False)
+
