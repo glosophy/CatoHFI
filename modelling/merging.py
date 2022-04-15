@@ -40,99 +40,105 @@ final.loc[final['ISO2'] == 'NA', 'longitude'] = longNA
 
 # Merge polity
 polity = pd.read_excel('p5v2018.xls')
-polity = polity.drop(['change', 'cyear', 'ccode', 'country', 'flag', 'fragment', 'polity2', 'durable', 'xrreg',
+polity = polity.drop(['change', 'cyear', 'ccode', 'flag', 'fragment', 'polity2', 'durable', 'xrreg',
                       'xrcomp', 'xropen', 'xconst', 'parreg', 'parcomp', 'exrec', 'exconst',
                       'polcomp', 'prior', 'emonth', 'eday', 'eyear', 'eprec', 'interim',
                       'bmonth', 'bday', 'byear', 'bprec', 'post', 'd5', 'sf',
                       'regtrans'], axis=1)
 
-polity = polity.rename(columns={'scode': 'ISO', 'oldName2': 'newName2'})
+polity = polity.rename(columns={'scode': 'ISO', 'country': 'countries'})
+polity['ISO2'] = polity.apply(lambda row: find_country(row.countries), axis=1)
 
-final = pd.merge(final, polity, how='left', on=['ISO', 'year'])
+# final = pd.merge(final, polity, how='left', on=['ISO', 'year', 'countries'])
 
-# Merge Happiness
-happiness = pd.read_excel('happiness.xls')
-happiness = happiness.rename(columns={'Country name': 'countries'})
+# # Merge Happiness
+# happiness = pd.read_excel('happiness.xls')
+# happiness = happiness.rename(columns={'Country name': 'countries'})
+#
+# happiness['ISO2'] = happiness.apply(lambda row: find_country(row.countries), axis=1)
+#
+# list_NF = happiness.loc[happiness.ISO2 == 'not found', 'countries']
+#
+# unique_listNF = list_NF.unique()
+# keysNF = ['BO', 'CG', 'CD', 'CZ', 'HK', 'IR', 'CI', 'nan', 'LA', 'MD', 'CY', 'nan', 'RU', 'SO', 'KR',
+#           'SZ', 'SY', 'TW', 'TZ', 'VE', 'VN']
+#
+# for i in range(len(unique_listNF)):
+#     happiness.loc[happiness['countries'] == unique_listNF[i], 'ISO2'] = keysNF[i]
+#
+# final = pd.merge(final, happiness, how='left', on=['ISO2', 'year'])
+#
+# # Legal origin
+# legal = pd.read_csv('legalOrigin.csv')
+#
+# legal['ISO2'] = legal.apply(lambda row: find_country(row.Country), axis=1)
+#
+# legal_NF = legal.loc[legal.ISO2 == 'not found', 'Country']
+# unique_legalNF = legal_NF.unique()
+#
+# legal_keysNF = ['BO', 'CN', 'CD', 'CG', 'CV', 'CZ', 'nan', 'CI', 'nan', 'TW', 'RU', 'nan', 'KR', 'SY', 'nan',
+#                 'VN', 'VE', 'nan', 'GB', 'nan', 'nan', 'IR', 'nan', 'nan', 'nan', 'nan', 'BN', 'GM', 'nan']
+#
+# for i in range(len(unique_legalNF)):
+#     legal.loc[legal['Country'] == unique_legalNF[i], 'ISO2'] = legal_keysNF[i]
+#
+# final = pd.merge(final, legal, how='left', on=['ISO2'])
+#
+# # Penn data
+# penn = pd.read_csv('penn.csv')
+#
+# penn['ISO2'] = penn.apply(lambda row: findalpha2(row.ISO), axis=1)
+#
+# final = pd.merge(final, penn, how='left', on=['ISO2', 'year'])
+#
+# # gdp data
+# gdp = pd.read_csv('gdpPerCap.csv')
+#
+# gdp['ISO2'] = gdp.apply(lambda row: find_country(row.country), axis=1)
+#
+# list_gdp_NF = gdp.loc[gdp.ISO2 == 'not found', 'country']
+# unique_gdp_listNF = list_gdp_NF.unique()
+#
+# # print(unique_gdp_listNF[49:])
+#
+# keys_gdp_NF = ['BS', 'BO', 'nan', 'nan', 'CD', 'CG', 'CI', 'nan', 'CZ', 'EG', 'GM', 'HK', 'IR', 'nan', 'KR', 'nan',
+#                'KG', 'LA', 'nan', 'nan', 'MD', 'SK', 'nan', 'nan', 'nan', 'nan', 'TZ', 'VE', 'VN', 'nan', 'nan', 'YE']
+#
+# for i in range(len(keys_gdp_NF)):
+#     gdp.loc[gdp['country'] == unique_gdp_listNF[49 + i], 'ISO2'] = keys_gdp_NF[i]
+#
+# final = pd.merge(final, gdp, how='left', on=['ISO2', 'year'])
+#
+# # Reorder columns
+# final = final[
+#     ['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO_x', 'ISO_y', 'ISO2', 'latitude', 'longitude',
+#      'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+#      'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+#      'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+#      'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+#      'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+#      'Social support', 'Healthy life expectancy at birth',
+#      'Freedom to make life choices', 'Generosity',
+#      'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
+#
+# # Export final file
+# final.to_csv('modellingFile.csv', index=False)
+#
+# # Export only columns we need for analysis
+# excel = final[['year', 'countries_x', 'ISO_x', 'latitude', 'longitude',
+#                'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
+#                'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
+#                'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
+#                'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
+#                'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
+#                'Social support', 'Healthy life expectancy at birth',
+#                'Freedom to make life choices', 'Generosity',
+#                'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
+#
+# excel.to_csv('allData.csv', index=False)
 
-happiness['ISO2'] = happiness.apply(lambda row: find_country(row.countries), axis=1)
+# drop 2019
+# corr matrix (PCA + FA + other indicators)
+# Nigeria + Haiti + Netherlands + New Zealand Polity
 
-list_NF = happiness.loc[happiness.ISO2 == 'not found', 'countries']
-
-unique_listNF = list_NF.unique()
-keysNF = ['BO', 'CG', 'CD', 'CZ', 'HK', 'IR', 'CI', 'nan', 'LA', 'MD', 'CY', 'nan', 'RU', 'SO', 'KR',
-          'SZ', 'SY', 'TW', 'TZ', 'VE', 'VN']
-
-for i in range(len(unique_listNF)):
-    happiness.loc[happiness['countries'] == unique_listNF[i], 'ISO2'] = keysNF[i]
-
-final = pd.merge(final, happiness, how='left', on=['ISO2', 'year'])
-
-# Legal origin
-legal = pd.read_csv('legalOrigin.csv')
-
-legal['ISO2'] = legal.apply(lambda row: find_country(row.Country), axis=1)
-
-legal_NF = legal.loc[legal.ISO2 == 'not found', 'Country']
-unique_legalNF = legal_NF.unique()
-
-legal_keysNF = ['BO', 'CN', 'CD', 'CG', 'CV', 'CZ', 'nan', 'CI', 'nan', 'TW', 'RU', 'nan', 'KR', 'SY', 'nan',
-                'VN', 'VE', 'nan', 'GB', 'nan', 'nan', 'IR', 'nan', 'nan', 'nan', 'nan', 'BN', 'GM', 'nan']
-
-for i in range(len(unique_legalNF)):
-    legal.loc[legal['Country'] == unique_legalNF[i], 'ISO2'] = legal_keysNF[i]
-
-final = pd.merge(final, legal, how='left', on=['ISO2'])
-
-
-# Penn data
-penn = pd.read_csv('penn.csv')
-
-penn['ISO2'] = penn.apply(lambda row: findalpha2(row.ISO), axis=1)
-
-final = pd.merge(final, penn, how='left', on=['ISO2', 'year'])
-
-# gdp data
-gdp = pd.read_csv('gdpPerCap.csv')
-
-gdp['ISO2'] = gdp.apply(lambda row: find_country(row.country), axis=1)
-
-list_gdp_NF = gdp.loc[gdp.ISO2 == 'not found', 'country']
-unique_gdp_listNF = list_gdp_NF.unique()
-
-# print(unique_gdp_listNF[49:])
-
-keys_gdp_NF = ['BS', 'BO', 'nan', 'nan', 'CD', 'CG', 'CI', 'nan', 'CZ', 'EG', 'GM', 'HK', 'IR', 'nan', 'KR', 'nan',
-               'KG', 'LA', 'nan', 'nan', 'MD', 'SK', 'nan', 'nan', 'nan', 'nan', 'TZ', 'VE', 'VN', 'nan', 'nan', 'YE']
-
-for i in range(len(keys_gdp_NF)):
-    gdp.loc[gdp['country'] == unique_gdp_listNF[49+i], 'ISO2'] = keys_gdp_NF[i]
-
-final = pd.merge(final, gdp, how='left', on=['ISO2', 'year'])
-
-
-# Reorder columns
-final = final[['year', 'countries_x', 'country', 'countries_y', 'Country', 'ISO_x', 'ISO_y', 'ISO2', 'latitude', 'longitude',
-               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-               'Social support', 'Healthy life expectancy at birth',
-               'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
-
-# Export final file
-final.to_csv('modellingFile.csv', index=False)
-
-# Export only columns we need for analysis
-excel = final[['year', 'countries_x', 'ISO_x', 'latitude', 'longitude',
-               'hf_score', 'hf_quartile', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion',
-               'pf_assembly', 'pf_expression', 'pf_identity', 'ef_government',
-               'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'legalOrigin',
-               'Cluster', 'PC1', 'PC2', 'PC3', 'F1', 'F2', 'F3', 'p5', 'democ',
-               'autoc', 'polity', 'Life Ladder', 'Log GDP per capita',
-               'Social support', 'Healthy life expectancy at birth',
-               'Freedom to make life choices', 'Generosity',
-               'Perceptions of corruption', 'Positive affect', 'Negative affect', 'hc', 'gdppc']]
-
-excel.to_csv('allData.csv', index=False)
+# flex function HFI 2022
