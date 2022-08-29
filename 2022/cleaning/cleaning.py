@@ -1,13 +1,13 @@
 import pandas as pd
-import numpy as np
 import os
 
 # get cwd
 cwd = os.getcwd()
-print(cwd)
 
 # read csv
-df = pd.read_csv(cwd + '/' + 'HFI2021.csv')
+df = pd.read_csv('../../2021/all_countries.csv')
+
+print(df.columns)
 
 # reorder columns
 df = df[['year', 'countries', 'ISO', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
@@ -55,3 +55,5 @@ df = df[['year', 'countries', 'ISO', 'region', 'hf_score', 'hf_rank', 'hf_quarti
          'ef_regulation_business_adm', 'ef_regulation_business_bureaucracy', 'ef_regulation_business_start',
          'ef_regulation_business_bribes', 'ef_regulation_business_licensing', 'ef_regulation_business_compliance',
          'ef_regulation_business', 'ef_regulation', 'ef_score', 'ef_rank']]
+
+df.to_csv('hfi2022_cc.csv')
