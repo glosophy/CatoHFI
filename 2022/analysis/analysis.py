@@ -60,6 +60,7 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
     return plt.show()
 
 
+# improved/deteriorated, overall scores
 def improve_deteriorate(year1, year2, indicator='hf_score'):
     """
     It calculates drops and improvements in the overall HFI score for given years.
@@ -72,15 +73,15 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
 
     year3 = year2 - 1  # for YoY comparison
 
-    selected_base = selected_df.loc[selected_df['year'] == year1, indicator]
-    selected_comparison = selected_df.loc[selected_df['year'] == year2, indicator]
+    selected_base, selected_comparison = selected_df.loc[selected_df['year'] == year1, indicator], \
+                                         selected_df.loc[selected_df['year'] == year2, indicator]
     diff = np.array(selected_comparison) - np.array(selected_base)
     diff_mean = np.mean(np.array(selected_comparison)) - np.mean(np.array(selected_base))
 
     print('-' * 25)
     print('Change in {0} ({1}-{2}):'.format(indicator, year2, year1), round(diff_mean, 3))
-    print('{0} {1}:'.format(indicator, year1), round(np.mean(np.array(selected_base)), 3))
-    print('{0} {1}:'.format(indicator, year2), round(np.mean(np.array(selected_comparison)), 3))
+    print('{0} {1}:'.format(indicator, year1), round(int(np.mean(np.array(selected_base))), 3))
+    print('{0} {1}:'.format(indicator, year2), round(int(np.mean(np.array(selected_comparison))), 3))
 
     all_comparison = df.loc[df['year'] == year2, indicator]
     all_previous = df.loc[df['year'] == year3, indicator]
@@ -89,8 +90,8 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
 
     print('-' * 25)
     print('Change in {0} ({1}-{2}):'.format(indicator, year3, year2), round(all_change_hf, 3))
-    print('{0} {1}:'.format(indicator, year3), round(np.mean(np.array(all_previous)), 3))
-    print('{0} {1}:'.format(indicator, year2), round(np.mean(np.array(all_comparison)), 3))
+    print('{0} {1}:'.format(indicator, year3), round(int(np.mean(np.array(all_previous))), 3))
+    print('{0} {1}:'.format(indicator, year2), round(int(np.mean(np.array(all_comparison))), 3))
     print('-' * 25)
 
     selected_decreased = 0
@@ -128,4 +129,31 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
     print('-' * 25)
 
 
-improve_deteriorate(2008, 2019)
+# top 10% countries lost or gained freedom between 2008 and 2019?
+def top_bottom_10(year1, year2, top=True, indicator='hf_score'):
+    '''
+    Did the top/bottom 10% countries gained or lost freedom between a given period of time?
+    :param indicator: indicator to compare. Overall HFI score set by default
+    :param top: if True, returns changes for top 10%. If False, returns changes for bottom 10%.
+    :param year1: base year
+    :param year2: comparison year
+    :return: integers with values corresponding to changes in freedom for the top10%
+    '''
+
+    hfi_base, hfi_comparison = selected_df.loc[selected_df['year'] == year1, indicator], \
+                               selected_df.loc[selected_df['year'] == year2, indicator]
+
+    if top:
+        base = np.sort(hfi_base)
+        comparison = np.sort(hfi_comparison)
+        mean_base = base[-14:].mean()
+        mean_comparison = comparison[-14:].mean()
+
+        print('{} for top 10% countries:'.format(indicator))
+        print('Mean 2008:', round(mean_base, 2))
+        print('Mean 2019:', round(mean_comparison, 2))
+        print('-' * 25)
+
+countries = len(selected_df['countries'].unique())
+print(countries)
+# get some sort of floor division to get the top/bottom 10% of countries
