@@ -7,7 +7,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # read csv
-df = pd.read_csv('2022/cleaning/hfi2022_cc.csv')
+df = pd.read_csv('/Users/guillerminasutter/PycharmProjects/CatoHFI/2022/cleaning/hfi2022_cc.csv')
 
 # 141 countries
 countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini',
@@ -24,11 +24,12 @@ selected_df = df[~df['countries'].isin(countries)]
 # density plot
 def density_plot(year1, year2, indicator='hf_score', all_regions=False):
     """
-    It returns the density plot for a set of given years and indicator.
-    year1: base year
-    year2: comparison year
-    indicator: any HFI indicator. Set to 'hf_score' by default
-    all_regions: boolean for regions density plots
+    This function plots density plots for regions, and a set of given indicators.
+    :param: year1: base year
+    :param: year2: comparison year
+    :param: indicator: any HFI indicator. Set to 'hf_score' by default
+    :param: all_regions: boolean for regions density plots
+    :return: It returns the density plot for a set of given years, indicators, and/or regions.
     """
     if all_regions:
         for i in range(len(regions)):
@@ -59,4 +60,72 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
     return plt.show()
 
 
-density_plot(2008, 2010, all_regions=False)
+def improve_deteriorate(year1, year2, indicator='hf_score'):
+    """
+    It calculates drops and improvements in the overall HFI score for given years.
+    :param year1: base year
+    :param year2: comparison year
+    :param indicator: indicator to compare. Overall HFI score set by default
+    :return: 1) The overall change in HFI score for previous year and earliest year, 2) Number of countries that
+    improved/decreased/didn't change their overall HFI scores for a set of given years
+    """
+
+    year3 = year2 - 1  # for YoY comparison
+
+    selected_base = selected_df.loc[selected_df['year'] == year1, indicator]
+    selected_comparison = selected_df.loc[selected_df['year'] == year2, indicator]
+    diff = np.array(selected_comparison) - np.array(selected_base)
+    diff_mean = np.mean(np.array(selected_comparison)) - np.mean(np.array(selected_base))
+
+    print('-' * 25)
+    print('Change in {0} ({1}-{2}):'.format(indicator, year2, year1), round(diff_mean, 3))
+    print('{0} {1}:'.format(indicator, year1), round(np.mean(np.array(selected_base)), 3))
+    print('{0} {1}:'.format(indicator, year2), round(np.mean(np.array(selected_comparison)), 3))
+
+    all_comparison = df.loc[df['year'] == year2, indicator]
+    all_previous = df.loc[df['year'] == year3, indicator]
+    all_diff = np.array(all_comparison) - np.array(all_previous)
+    all_change_hf = np.mean(np.array(all_comparison)) - np.mean(np.array(all_previous))
+
+    print('-' * 25)
+    print('Change in {0} ({1}-{2}):'.format(indicator, year3, year2), round(all_change_hf, 3))
+    print('{0} {1}:'.format(indicator, year3), round(np.mean(np.array(all_previous)), 3))
+    print('{0} {1}:'.format(indicator, year2), round(np.mean(np.array(all_comparison)), 3))
+    print('-' * 25)
+
+    selected_decreased = 0
+    selected_improved = 0
+    selected_same = 0
+    for i in diff:
+        if i > 0:
+            selected_improved += 1
+        if i < 0:
+            selected_decreased += 1
+        if i == 0:
+            selected_same += 1
+
+    print('Countries that improved/decreased ({0}-{1}):'.format(year1, year2))
+    print('Improved countries:', selected_improved)
+    print('Decreased countries:', selected_decreased)
+    print('No changes in score:', selected_same)
+    print('-' * 25)
+
+    decreased = 0
+    improved = 0
+    same = 0
+    for i in all_diff:
+        if i > 0:
+            improved += 1
+        if i < 0:
+            decreased += 1
+        if i == 0:
+            same += 1
+
+    print('Countries that improved/decreased ({0}-{1}):'.format(year3, year2))
+    print('Improved countries:', improved)
+    print('Decreased countries:', decreased)
+    print('No changes in score:', same)
+    print('-' * 25)
+
+
+improve_deteriorate(2008, 2019)
