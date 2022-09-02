@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 import numpy as np
 
 # Load data
-df = pd.read_csv('./../2021/all_countries.csv')
+df = pd.read_csv('../../2021/all_countries.csv')
 
 # keep category columns
 columns = ['ISO', 'year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
