@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
+import math
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -143,17 +144,29 @@ def top_bottom_10(year1, year2, top=True, indicator='hf_score'):
     hfi_base, hfi_comparison = selected_df.loc[selected_df['year'] == year1, indicator], \
                                selected_df.loc[selected_df['year'] == year2, indicator]
 
+    total_countries = len(hfi_base)
+    percent = math.floor(total_countries * .1)
+
+    base = np.sort(hfi_base)
+    comparison = np.sort(hfi_comparison)
+
     if top:
-        base = np.sort(hfi_base)
-        comparison = np.sort(hfi_comparison)
-        mean_base = base[-14:].mean()
-        mean_comparison = comparison[-14:].mean()
+        mean_base = base[-percent:].mean()
+        mean_comparison = comparison[-percent:].mean()
 
         print('{} for top 10% countries:'.format(indicator))
-        print('Mean 2008:', round(mean_base, 2))
-        print('Mean 2019:', round(mean_comparison, 2))
+        print('Mean {}:'.format(year1), round(mean_base, 2))
+        print('Mean {}:'.format(year2), round(mean_comparison, 2))
         print('-' * 25)
 
-countries = len(selected_df['countries'].unique())
-print(countries)
-# get some sort of floor division to get the top/bottom 10% of countries
+    if not top:
+        mean_base = base[:percent].mean()
+        mean_comparison = comparison[:percent].mean()
+
+        print('{} for bottom 10% countries:'.format(indicator))
+        print('Mean {}:'.format(year1), round(mean_base, 2))
+        print('Mean {}:'.format(year2), round(mean_comparison, 2))
+        print('-' * 25)
+
+
+top_bottom_10(2008, 2019, top=False, indicator='pf_expression')
