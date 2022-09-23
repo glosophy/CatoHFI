@@ -7,11 +7,13 @@ import matplotlib.pyplot as plt
 # Load data
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_csv('./../2021/all_countries.csv')
+df = pd.read_csv('../../2021/all_countries.csv')
 
 # keep category columns
 columns = ['year', 'countries', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-           'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'hf_score']
+           'pf_identity', 'ef_government_consumption', 'ef_government_transfers',
+           'ef_government_enterprises', 'ef_government_tax', 'ef_government_soa', 'ef_legal', 'ef_money',
+           'ef_trade', 'ef_regulation', 'hf_score']
 
 df_fa = df[columns]
 
@@ -38,7 +40,7 @@ x = StandardScaler().fit_transform(fa_features)
 
 # Create factor analysis object and perform factor analysis
 fa = FactorAnalyzer()
-fa.set_params(n_factors=12, rotation='varimax')
+fa.set_params(n_factors=16, rotation='varimax')
 fa.fit(x)
 
 # Eigenvalues
@@ -76,9 +78,10 @@ principalDf = pd.DataFrame(data=loadings,
                            columns=['F1', 'F2', 'F3'])
 
 categories = ['pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-              'pf_identity', 'ef_government', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation']
+              'pf_identity', 'ef_government_consumption', 'ef_government_transfers', 'ef_government_enterprises',
+              'ef_government_tax', 'ef_government_soa', 'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation']
 
 principalDf['categories'] = categories
 
 # Export csv
-principalDf.to_csv('rotationFA.csv')
+principalDf.to_csv('GovRotationFA.csv', index=False)

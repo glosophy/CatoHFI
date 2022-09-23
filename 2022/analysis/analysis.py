@@ -27,7 +27,7 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
     year1: base year
     year2: comparison year
     indicator: any HFI indicator. Set to 'hf_score' by default
-    all_regions: boolean for region density plots
+    all_regions: boolean for regions density plots
     """
     if all_regions:
         for i in range(len(regions)):
