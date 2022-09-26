@@ -169,4 +169,4 @@ def top_bottom_10(year1, year2, top=True, indicator='hf_score'):
         print('-' * 25)
 
 
-top_bottom_10(2008, 2019, top=False, indicator='pf_expression')
+# top_bottom_10(2008, 2019, top=False, indicator='pf_expression')
