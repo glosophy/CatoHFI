@@ -1,5 +1,8 @@
 import pandas as pd
 import seaborn as sns
+import matplotlib
+
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -132,14 +135,14 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
 
 # top 10% countries lost or gained freedom between 2008 and 2019?
 def top_bottom_10(year1, year2, top=True, indicator='hf_score'):
-    '''
+    """
     Did the top/bottom 10% countries gained or lost freedom between a given period of time?
     :param indicator: indicator to compare. Overall HFI score set by default
     :param top: if True, returns changes for top 10%. If False, returns changes for bottom 10%.
     :param year1: base year
     :param year2: comparison year
     :return: integers with values corresponding to changes in freedom for the top10%
-    '''
+    """
 
     hfi_base, hfi_comparison = selected_df.loc[selected_df['year'] == year1, indicator], \
                                selected_df.loc[selected_df['year'] == year2, indicator]
@@ -169,4 +172,27 @@ def top_bottom_10(year1, year2, top=True, indicator='hf_score'):
         print('-' * 25)
 
 
-top_bottom_10(2008, 2019, top=False, indicator='pf_expression')
+# quartiles over time
+def plot_quartiles(year1, year2, indicator='hf_score'):
+    """
+    Calculates the gap between quartiles
+    :param indicator: indicator to compare. Overall HFI score set by default
+    :param year1: base year
+    :param year2: latest year
+    :return: a plot of the evolution of quartiles over time
+    """
+
+    quartile = selected_df['hf_quartile'].unique()
+    by_quartile = selected_df.groupby(['year', 'hf_quartile'])[indicator].mean().reset_index()
+
+    for i in quartile:
+        a = by_quartile.loc[by_quartile['hf_quartile'] == i, indicator]
+        plt.plot((list(range(year1, year2 + 1))), a, label=i)
+        plt.legend(title='Quartiles', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.title('{0} Score by HFI Quartile Over Time ({1}-{2})'.format(indicator, year1, year2))
+        plt.xlabel('Year')
+        plt.ylabel('Score')
+    return plt.show()
+
+
+plot_quartiles(2008, 2019)
