@@ -1,8 +1,5 @@
 import pandas as pd
 import seaborn as sns
-import matplotlib
-
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -179,14 +176,19 @@ def plot_quartiles(year1, year2, indicator='hf_score'):
     :param indicator: indicator to compare. Overall HFI score set by default
     :param year1: base year
     :param year2: latest year
-    :return: a plot of the evolution of quartiles over time
+    :return: a plot of the evolution of quartiles over time and the corresponding scores for each quartile for each year
     """
 
     quartile = selected_df['hf_quartile'].unique()
     by_quartile = selected_df.groupby(['year', 'hf_quartile'])[indicator].mean().reset_index()
 
+    by_quartile = by_quartile.pivot(index='year', columns='hf_quartile', values=indicator)
+    by_quartile['diff_quartile'] = by_quartile.iloc[:, 0] - by_quartile.iloc[:, -1]
+    print(by_quartile)
+    print('-' * 25)
+
     for i in quartile:
-        a = by_quartile.loc[by_quartile['hf_quartile'] == i, indicator]
+        a = by_quartile.loc[by_quartile['hf_quartile'] == i, indicator].to_list()
         plt.plot((list(range(year1, year2 + 1))), a, label=i)
         plt.legend(title='Quartiles', bbox_to_anchor=(1.05, 1), loc='upper left')
         plt.title('{0} Score by HFI Quartile Over Time ({1}-{2})'.format(indicator, year1, year2))
@@ -195,4 +197,124 @@ def plot_quartiles(year1, year2, indicator='hf_score'):
     return plt.show()
 
 
-plot_quartiles(2008, 2019)
+# highest and lowest HFI score over time
+def gap_scores(year1, year2, indicator='hf_score'):
+    """
+    Calculates and plots the gap between the highest and lowest score for a given indicator over a set of years
+    :param indicator: indicator to compare. Overall HFI score set by default
+    :param year1: base year
+    :param year2: latest year
+    :return: a plot of the evolution of highest and lowest score over time and printed difference of the gap
+    """
+
+    low = []
+    high = []
+
+    for i in range(year1, year2 + 1):
+        a = selected_df.loc[selected_df['year'] == i, indicator]
+        minValue = a.min()
+        maxValue = a.max()
+        low.append(minValue)
+        high.append(maxValue)
+
+    plt.plot(list(range(year1, year2 + 1)), high, label='Highest Score')
+    plt.plot(list(range(year1, year2 + 1)), low, label='Lowest Score')
+    plt.legend(title='Score', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.title('Highest and Lowest {0} Score ({1}-{2})'.format(indicator, year1, year2))
+    plt.xlabel('Year')
+    plt.ylabel('Score')
+
+    diff1 = high[0] - low[0]
+    diff2 = high[-1] - low[-1]
+    print('Gap between highest and lowest {} score (141 countries):'.format(indicator))
+    print('Gap {}:'.format(year1), round(diff1, 2))
+    print('Gap {}:'.format(year2), round(diff2, 2))
+    print('-' * 25)
+
+    return plt.show()
+
+
+# top 10% countries
+def gap_10_percent(year1, year2, indicator='hf_score'):
+    """
+    Calculates and plots the gap between the highest and lowest score for a given indicator over a set of years
+    :param indicator: indicator to compare. Overall HFI score set by default
+    :param year1: base year
+    :param year2: latest year
+    :return: a plot of the evolution of highest and lowest score over time and printed difference of the gap
+    """
+
+    lowest10 = []
+    highest10 = []
+    for i in range(year1, year2 + 1):
+        a = selected_df.loc[selected_df['year'] == i, indicator]
+        a = np.sort(a)
+        highest = a[-14:].mean()
+        lowest = a[:14].mean()
+        lowest10.append(lowest)
+        highest10.append(highest)
+
+    plt.plot(list(range(int(year1), int(year2 + 1))), highest10, label='Highest 10%')
+    plt.plot(list(range(int(year1), int(year2 + 1))), lowest10, label='Lowest 10%')
+    plt.legend(title='Score', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.title('Gap Between Highest and Lowest 10% {0} Score ({1}-{2})'.format(indicator, year1, year2))
+    plt.xlabel('Year')
+    plt.ylabel('Score')
+
+    diff1_10 = highest10[0] - lowest10[0]
+    diff2_10 = highest10[-1] - lowest10[-1]
+    print('Gap in {} between highest and lowest 10% (141 countries):'.format(indicator))
+    print('Gap 2008:', round(diff1_10, 2))
+    print('Gap 2019:', round(diff2_10, 2))
+    print('-' * 25)
+
+    return plt.show()
+
+
+# regions
+by_region = selected_df.groupby(['year', 'region'])[indicator].mean().reset_index()
+region_pivot = by_region.pivot(index='year', columns='region', values='hf_score')
+# region_pivot.to_csv('regions-{}.csv'.format(indicator), index=False)
+
+main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
+                   'pf_identity', 'pf_score', 'ef_government',
+                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+
+cat_df = []
+for i in main_categories:
+    cat_by_region = selected_df.groupby(['year', 'region'])[i].mean().reset_index()
+    cat_pivot = cat_by_region.pivot(index='year', columns='region', values=i)
+    cat_df.append(cat_pivot)
+    cat_pivot = cat_pivot.reset_index()
+    # cat_pivot.to_csv('CAT_{}.csv'.format(i), index=False)
+
+for i in range(len(cat_df)):
+    df = cat_df[i]
+    col = df.columns
+    df = df.reset_index()
+    cat_diff = []
+    for j in col:
+        year2008 = df[j][0]
+        year2019 = df[j][10]
+        diff = year2019 - year2008
+        cat_diff.append(diff)
+    cat_diff = np.array(cat_diff)
+    minValue = cat_diff.min()
+    maxValue = cat_diff.max()
+    minIndex = np.where(cat_diff == minValue)
+    maxIndex = np.where(cat_diff == maxValue)
+    print('Category:', main_categories[i])
+    stringMax = str(col[maxIndex])
+    stringMax = stringMax.split('[')[1]
+    stringMax = stringMax.split(']')[0]
+
+    stringMin = str(col[minIndex])
+    stringMin = stringMin.split('[')[1]
+    stringMin = stringMin.split(']')[0]
+
+    print('Most improved region (2008-2019):', stringMax, round(maxValue, 2))
+    print('Most deteriorated region (2008-2019):', stringMin, round(minValue, 2))
+    print('-' * 25)
+
+
+# women's freedom
