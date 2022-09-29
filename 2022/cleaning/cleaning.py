@@ -71,4 +71,4 @@ df.columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile
               # economic freedom
               'ef_score', 'ef_rank']
 
-df.to_csv('hfi2022_cc.csv')
+df.to_csv('hfi2022_cc.csv', index=False)

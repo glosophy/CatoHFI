@@ -8,12 +8,19 @@ import math
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # read csv
-df = pd.read_csv('/Users/guillerminasutter/PycharmProjects/CatoHFI/2022/cleaning/hfi2022_cc.csv')
+df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
 
-# 141 countries
-countries = ['Belarus', 'Bhutan', 'Brunei Darussalam', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini',
-             'Gambia, The', 'Guinea', 'Iraq', 'Lao PDR', 'Lebanon', 'Liberia', 'Libya', 'Qatar',
-             'Saudi Arabia', 'Seychelles', 'Somalia', 'Sudan', 'Suriname', 'Tajikistan', 'Timor-Leste', 'Yemen, Rep.']
+# calculate women's freedoms
+df['pf_women'] = df[['pf_movement_vdem_women', 'pf_identity_same_f', 'pf_identity_inheritance',
+                     'pf_identity_divorce', 'pf_identity_fgm', ]].mean(axis=1)
+
+# 123 countries
+countries = ['Angola', 'Armenia', 'Azerbaijan', 'Belarus', 'Bhutan', 'Bosnia and Herzegovina', 'Brunei Darussalam',
+             'Burkina Faso', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini', 'Ethiopia', 'Gambia, The',
+             'Guinea', 'Georgia', 'Iraq', 'Kazakhstan', 'Kyrgyz Republic', 'Lao PDR', 'Lebanon', 'Lesotho', 'Liberia',
+             'Libya', 'Mauritania', 'Moldova', 'Mongolia', 'Montenegro', 'Mozambique', 'North Macedonia', 'Qatar',
+             'Saudi Arabia', 'Serbia', 'Seychelles', 'Somalia', 'Sudan', 'Suriname', 'Tajikistan', 'Timor-Leste',
+             'Vietnam', 'Yemen, Rep.']
 
 regions = df['region'].unique()
 
@@ -40,7 +47,7 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
             reg2 = selected_df.loc[(selected_df['year'] == year2) & (selected_df['region'] == regions[i]), indicator]
             sns.distplot(reg2, hist=False, kde=True, kde_kws={'linewidth': 3}, label='{}'.format(year2))
 
-            plt.legend(prop={'size': 16}, title='{} Scores'.format(indicator))
+            plt.legend(prop={'size': 16}, title='{}'.format(indicator))
             plt.title('Density Plot | {0} in {1}'.format(indicator, regions[i]))
             plt.xlabel('{}'.format(indicator))
             plt.ylabel('Density')
@@ -48,10 +55,10 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
 
     else:
         hfi1 = selected_df.loc[selected_df['year'] == year1, indicator]
-        sns.distplot(hfi1, hist=False, kde=True, kde_kws={'linewidth': 3}, label='{}'.format(year1))
+        sns.distplot(hfi1, hist=False, kde=True, kde_kws={'line-width': 3}, label='{}'.format(year1))
 
         hfi2 = selected_df.loc[selected_df['year'] == year2, indicator]
-        sns.distplot(hfi2, hist=False, kde=True, kde_kws={'linewidth': 3}, label='{}'.format(year2))
+        sns.distplot(hfi2, hist=False, kde=True, kde_kws={'line-width': 3}, label='{}'.format(year2))
 
         plt.legend(prop={'size': 16}, title='{} Scores'.format(indicator))
         plt.title('Density Plot | {} '.format(indicator))
@@ -80,9 +87,9 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
     diff_mean = np.mean(np.array(selected_comparison)) - np.mean(np.array(selected_base))
 
     print('-' * 25)
-    print('Change in {0} ({1}-{2}):'.format(indicator, year2, year1), round(diff_mean, 3))
-    print('{0} {1}:'.format(indicator, year1), round(int(np.mean(np.array(selected_base))), 3))
-    print('{0} {1}:'.format(indicator, year2), round(int(np.mean(np.array(selected_comparison))), 3))
+    print('Change in {0} ({1}-{2}):'.format(indicator, year1, year2), round(diff_mean, 3))
+    print('{0} {1}:'.format(indicator, year1), round(float(np.mean(np.array(selected_base))), 3))
+    print('{0} {1}:'.format(indicator, year2), round(float(np.mean(np.array(selected_comparison))), 3))
 
     all_comparison = df.loc[df['year'] == year2, indicator]
     all_previous = df.loc[df['year'] == year3, indicator]
@@ -91,8 +98,8 @@ def improve_deteriorate(year1, year2, indicator='hf_score'):
 
     print('-' * 25)
     print('Change in {0} ({1}-{2}):'.format(indicator, year3, year2), round(all_change_hf, 3))
-    print('{0} {1}:'.format(indicator, year3), round(int(np.mean(np.array(all_previous))), 3))
-    print('{0} {1}:'.format(indicator, year2), round(int(np.mean(np.array(all_comparison))), 3))
+    print('{0} {1}:'.format(indicator, year3), round(float(np.mean(np.array(all_previous))), 3))
+    print('{0} {1}:'.format(indicator, year2), round(float(np.mean(np.array(all_comparison))), 3))
     print('-' * 25)
 
     selected_decreased = 0
@@ -271,50 +278,66 @@ def gap_10_percent(year1, year2, indicator='hf_score'):
     return plt.show()
 
 
-# # regions
-# by_region = selected_df.groupby(['year', 'region'])[indicator].mean().reset_index()
-# region_pivot = by_region.pivot(index='year', columns='region', values='hf_score')
-# # region_pivot.to_csv('regions-{}.csv'.format(indicator), index=False)
-#
-# main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-#                    'pf_identity', 'pf_score', 'ef_government',
-#                    'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
-#
-# cat_df = []
-# for i in main_categories:
-#     cat_by_region = selected_df.groupby(['year', 'region'])[i].mean().reset_index()
-#     cat_pivot = cat_by_region.pivot(index='year', columns='region', values=i)
-#     cat_df.append(cat_pivot)
-#     cat_pivot = cat_pivot.reset_index()
-#     # cat_pivot.to_csv('CAT_{}.csv'.format(i), index=False)
-#
-# for i in range(len(cat_df)):
-#     df = cat_df[i]
-#     col = df.columns
-#     df = df.reset_index()
-#     cat_diff = []
-#     for j in col:
-#         year2008 = df[j][0]
-#         year2019 = df[j][10]
-#         diff = year2019 - year2008
-#         cat_diff.append(diff)
-#     cat_diff = np.array(cat_diff)
-#     minValue = cat_diff.min()
-#     maxValue = cat_diff.max()
-#     minIndex = np.where(cat_diff == minValue)
-#     maxIndex = np.where(cat_diff == maxValue)
-#     print('Category:', main_categories[i])
-#     stringMax = str(col[maxIndex])
-#     stringMax = stringMax.split('[')[1]
-#     stringMax = stringMax.split(']')[0]
-#
-#     stringMin = str(col[minIndex])
-#     stringMin = stringMin.split('[')[1]
-#     stringMin = stringMin.split(']')[0]
-#
-#     print('Most improved region (2008-2019):', stringMax, round(maxValue, 2))
-#     print('Most deteriorated region (2008-2019):', stringMin, round(minValue, 2))
-#     print('-' * 25)
-#
-#
-# # women's freedom
+# plot indicators over time
+def plot_indicators(indicators='main'):
+    """
+    It plots a set of given indicators over time (2000-2020) for all countries.
+    :param indicators: 'main' == hf_score, pf_score, ef_score. Can also pass a list with other indicators.
+    :return: a plot with the evolution of indicators over time.
+    """
+
+    years = selected_df['year'].unique()
+
+    if indicators == 'main':
+        indicators = ['hf_score', 'ef_score', 'pf_score']
+    else:
+        indicators = indicators
+
+    for i in indicators:
+        selected_indicator = selected_df.groupby(['year'])[i].mean().reset_index()
+        plt.plot(years, selected_indicator[i], label=i)
+        plt.legend(title='Indicators', loc='best')
+        plt.title('Scores Over Time (2000-2020)')
+        plt.xlabel('Year')
+        plt.ylabel('Score')
+    return plt.show()
+
+
+def regions_analysis(indicators='main'):
+    """
+    It plots a set of given indicators over time (2000-2020) for all regions.
+    :param indicators: 'main' == hf_score, pf_score, ef_score. Can also pass a list with other indicators.
+    :return: a plot with the evolution of regions over time.
+    """
+
+    if indicators == 'main':
+        indicators = ['hf_score', 'ef_score', 'pf_score']
+    else:
+        indicators = indicators
+
+    for i in indicators:
+        by_region = selected_df.groupby(['year', 'region'])[i].mean().reset_index()
+        region_pivot = by_region.pivot(index='year', columns='region', values=i)
+
+        for j in selected_df['region'].unique():
+            a = np.array(region_pivot[j])
+            plt.plot(range(2000, 2020 + 1), a, label=j)
+            plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
+            plt.title('{} Over Time (2000-2020)'.format(i))
+            plt.xlabel('Year')
+            plt.ylabel('Score')
+        plt.show()
+
+
+regions_analysis(indicators='main')
+
+
+main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
+                   'pf_identity', 'pf_score', 'ef_government',
+                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+
+
+# improve_deteriorate(2000, 2020)
+# improve_deteriorate(2000, 2020, indicator='pf_score')
+# improve_deteriorate(2000, 2020, indicator='ef_score')
+
