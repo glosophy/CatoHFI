@@ -14,6 +14,14 @@ df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
 df['pf_women'] = df[['pf_movement_vdem_women', 'pf_identity_same_f', 'pf_identity_inheritance',
                      'pf_identity_divorce', 'pf_identity_fgm', ]].mean(axis=1)
 
+# main
+main = ['hf_score', 'pf_score', 'ef_score']
+
+# main categories
+all_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
+                   'pf_identity', 'pf_score', 'ef_government',
+                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+
 # 123 countries
 countries = ['Angola', 'Armenia', 'Azerbaijan', 'Belarus', 'Bhutan', 'Bosnia and Herzegovina', 'Brunei Darussalam',
              'Burkina Faso', 'Cabo Verde', 'Cambodia', 'Comoros', 'Djibouti', 'Eswatini', 'Ethiopia', 'Gambia, The',
@@ -279,7 +287,7 @@ def gap_10_percent(year1, year2, indicator='hf_score'):
 
 
 # plot indicators over time
-def plot_indicators(indicators='main'):
+def plot_indicators(indicators=main):
     """
     It plots a set of given indicators over time (2000-2020) for all countries.
     :param indicators: 'main' == hf_score, pf_score, ef_score. Can also pass a list with other indicators.
@@ -288,7 +296,7 @@ def plot_indicators(indicators='main'):
 
     years = selected_df['year'].unique()
 
-    if indicators == 'main':
+    if indicators == main:
         indicators = ['hf_score', 'ef_score', 'pf_score']
     else:
         indicators = indicators
@@ -303,14 +311,14 @@ def plot_indicators(indicators='main'):
     return plt.show()
 
 
-def regions_analysis(indicators='main'):
+def regions_analysis(indicators=main):
     """
     It plots a set of given indicators over time (2000-2020) for all regions.
     :param indicators: 'main' == hf_score, pf_score, ef_score. Can also pass a list with other indicators.
-    :return: a plot with the evolution of regions over time.
+    :return: a plot with the evolution of indicators for regions over time.
     """
 
-    if indicators == 'main':
+    if indicators == main:
         indicators = ['hf_score', 'ef_score', 'pf_score']
     else:
         indicators = indicators
@@ -321,20 +329,24 @@ def regions_analysis(indicators='main'):
 
         for j in selected_df['region'].unique():
             a = np.array(region_pivot[j])
-            plt.plot(range(2000, 2020 + 1), a, label=j)
-            plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
-            plt.title('{} Over Time (2000-2020)'.format(i))
-            plt.xlabel('Year')
-            plt.ylabel('Score')
-        plt.show()
+
+            for k in a:
+                print('Change in {0} score in {1} (2000-2020):'.format(j, i))
 
 
-regions_analysis(indicators='main')
+        #     plt.plot(range(2000, 2020 + 1), a, label=j)
+        #     plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
+        #     plt.title('{} Over Time (2000-2020)'.format(i))
+        #     plt.xlabel('Year')
+        #     plt.ylabel('Score')
+        # plt.show()
+
+            print(a)
 
 
-main_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-                   'pf_identity', 'pf_score', 'ef_government',
-                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+
+
+regions_analysis()
 
 
 # improve_deteriorate(2000, 2020)
