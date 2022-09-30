@@ -345,7 +345,6 @@ def regions_analysis(indicators=main):
 
 
 
-
 regions_analysis()
 
 
