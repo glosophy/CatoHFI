@@ -63,10 +63,10 @@ def density_plot(year1, year2, indicator='hf_score', all_regions=False):
 
     else:
         hfi1 = selected_df.loc[selected_df['year'] == year1, indicator]
-        sns.distplot(hfi1, hist=False, kde=True, kde_kws={'line-width': 3}, label='{}'.format(year1))
+        sns.distplot(hfi1, hist=False, kde=True, kde_kws={'linewidth': 3}, label='{}'.format(year1))
 
         hfi2 = selected_df.loc[selected_df['year'] == year2, indicator]
-        sns.distplot(hfi2, hist=False, kde=True, kde_kws={'line-width': 3}, label='{}'.format(year2))
+        sns.distplot(hfi2, hist=False, kde=True, kde_kws={'linewidth': 3}, label='{}'.format(year2))
 
         plt.legend(prop={'size': 16}, title='{} Scores'.format(indicator))
         plt.title('Density Plot | {} '.format(indicator))
@@ -345,10 +345,11 @@ def regions_analysis(indicators=main):
 
 
 
-regions_analysis()
+# regions_analysis()
 
 
 # improve_deteriorate(2000, 2020)
 # improve_deteriorate(2000, 2020, indicator='pf_score')
 # improve_deteriorate(2000, 2020, indicator='ef_score')
 
+density_plot(2000, 2020)
