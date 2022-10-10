@@ -303,6 +303,7 @@ def plot_indicators(indicators=main):
 
     for i in indicators:
         selected_indicator = selected_df.groupby(['year'])[i].mean().reset_index()
+        selected_indicator = selected_indicator.sort_values(by='year', ascending=False)
         plt.plot(years, selected_indicator[i], label=i)
         plt.legend(title='Indicators', loc='best')
         plt.title('Scores Over Time (2000-2020)')
@@ -352,4 +353,4 @@ def regions_analysis(indicators=main):
 # improve_deteriorate(2000, 2020, indicator='pf_score')
 # improve_deteriorate(2000, 2020, indicator='ef_score')
 
-density_plot(2000, 2020)
+plot_indicators()
