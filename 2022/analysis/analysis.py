@@ -353,4 +353,6 @@ def regions_analysis(indicators=main):
 # improve_deteriorate(2000, 2020, indicator='pf_score')
 # improve_deteriorate(2000, 2020, indicator='ef_score')
 
-plot_indicators()
+# plot_indicators(['hf_score'])
+
+top_bottom_10(2000, 2020, top=False)
