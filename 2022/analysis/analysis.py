@@ -19,8 +19,8 @@ main = ['hf_score', 'pf_score', 'ef_score']
 
 # main categories
 all_categories = ['hf_score', 'pf_rol', 'pf_ss', 'pf_movement', 'pf_religion', 'pf_assembly', 'pf_expression',
-                   'pf_identity', 'pf_score', 'ef_government',
-                   'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
+                  'pf_identity', 'pf_score', 'ef_government',
+                  'ef_legal', 'ef_money', 'ef_trade', 'ef_regulation', 'ef_score']
 
 # 123 countries
 countries = ['Angola', 'Armenia', 'Azerbaijan', 'Belarus', 'Bhutan', 'Bosnia and Herzegovina', 'Brunei Darussalam',
@@ -330,29 +330,17 @@ def regions_analysis(indicators=main):
 
         for j in selected_df['region'].unique():
             a = np.array(region_pivot[j])
+            change = a[-1] - a[0]
+            print('Change in {0} score in {1} (2000-2020): {2}'.format(j, i, round(change, 2)))
 
-            for k in a:
-                print('Change in {0} score in {1} (2000-2020):'.format(j, i))
+            plt.plot(range(2000, 2020 + 1), a, label=j)
+            plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
+            plt.title('{} Over Time (2000-2020)'.format(i))
+            plt.xlabel('Year')
+            plt.ylabel('Score')
 
-
-        #     plt.plot(range(2000, 2020 + 1), a, label=j)
-        #     plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
-        #     plt.title('{} Over Time (2000-2020)'.format(i))
-        #     plt.xlabel('Year')
-        #     plt.ylabel('Score')
-        # plt.show()
-
-            print(a)
+        plt.show()
+        print('-' * 25)
 
 
-
-# regions_analysis()
-
-
-# improve_deteriorate(2000, 2020)
-# improve_deteriorate(2000, 2020, indicator='pf_score')
-# improve_deteriorate(2000, 2020, indicator='ef_score')
-
-# plot_indicators(['hf_score'])
-
-top_bottom_10(2000, 2020, top=False)
+regions_analysis()
