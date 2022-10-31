@@ -23,7 +23,7 @@ other_cat_pf = ['pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal', 'pf_rol_
                 'pf_identity_same', 'pf_identity_divorce', 'pf_identity_inheritance', 'pf_identity_fgm']
 
 other_cat_ef = ['ef_government_consumption', 'ef_government_transfers',
-                'ef_government_enterprises', 'ef_government_tax', 'ef_government_soa',
+                'ef_government_investment', 'ef_government_tax', 'ef_government_soa',
                 'ef_legal_judicial', 'ef_legal_courts', 'ef_legal_protection', 'ef_legal_military',
                 'ef_legal_integrity', 'ef_legal_enforcement', 'ef_legal_regulatory',
                 'ef_legal_police', 'ef_money_growth', 'ef_money_sd', 'ef_money_inflation',
@@ -39,7 +39,7 @@ all_pf = ['pf_rol', 'pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal', 'pf_
           'pf_expression_bti', 'pf_expression_cld',
           'pf_identity', 'pf_identity_same', 'pf_identity_divorce', 'pf_identity_inheritance', 'pf_identity_fgm']
 
-all_ef = ['ef_government', 'ef_government_consumption', 'ef_government_transfers', 'ef_government_enterprises',
+all_ef = ['ef_government', 'ef_government_consumption', 'ef_government_transfers', 'ef_government_investment',
           'ef_government_tax', 'ef_government_soa', 'ef_legal', 'ef_legal_judicial', 'ef_legal_courts',
           'ef_legal_protection', 'ef_legal_military', 'ef_legal_integrity', 'ef_legal_enforcement',
           'ef_legal_regulatory', 'ef_legal_police', 'ef_money', 'ef_money_growth', 'ef_money_sd', 'ef_money_inflation',
@@ -196,9 +196,33 @@ for co in range(len(country)):
     ef = []
 
     for j in all_pf:
-        x = df.loc[(df['year'] == 2019) & (df['countries'] == country[co]), j]
+        x = df.loc[(df['year'] == 2020) & (df['countries'] == country[co]), j]
         pf.append(float(x))
 
     for k in all_ef:
-        x = df.loc[(df['year'] == 2019) & (df['countries'] == country[co]), k]
+        x = df.loc[(df['year'] == 2020) & (df['countries'] == country[co]), k]
         ef.append(float(x))
+
+    # personal freedom
+    pos = [5, 9, 13, 17, 22, 30]
+    acc = 0
+    for i in range(len(pos)):
+        pf.insert(pos[i], 0)
+        acc += 1
+    w = pd.DataFrame(pf)
+    w = w.fillna(0)  # fillna with 0 for the bar chart
+    # w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
+    #          index=False, header=False)
+
+    print(w)
+
+    # economic freedom
+    pos = [6, 15, 20, 25]
+    acc = 0
+    for i in range(len(pos)):
+        ef.insert(pos[i] + acc, 0)
+        acc += 1
+    w = pd.DataFrame(ef)
+    w = w.fillna(0)  # fillna with 0 for the bar chart
+    # w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
+    #          index=False, header=False)
