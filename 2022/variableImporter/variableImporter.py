@@ -204,17 +204,15 @@ for co in range(len(country)):
         ef.append(float(x))
 
     # personal freedom
-    pos = [5, 9, 13, 17, 22, 30]
+    pos = [5, 9, 13, 17, 23, 30]
     acc = 0
     for i in range(len(pos)):
         pf.insert(pos[i], 0)
         acc += 1
     w = pd.DataFrame(pf)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    # w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphPF/{}.csv'.format(country_file[co]),
-    #          index=False, header=False)
-
-    print(w)
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
+             index=False, header=False)
 
     # economic freedom
     pos = [6, 15, 20, 25]
@@ -224,5 +222,60 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    # w.to_csv('/Users/guillermina/Dropbox/Human Freedom Index/2021/Data/GraphEF/{}.csv'.format(country_file[co]),
-    #          index=False, header=False)
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
+             index=False, header=False)
+
+# human freedom chart - order: country, world, region
+selected = pd.read_csv('../../2022/selected_countries.csv')
+
+# world average
+world_avg = []
+for i in selected['year'].unique():
+    mean = selected.loc[selected['year'] == i, 'hf_score'].mean()
+    world_avg.append(mean)
+
+world_avg = world_avg[::-1]
+
+# score countries
+countries_score = []
+region_score = []
+for i in df['countries'].unique():
+
+    if i not in ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']:
+        country_hf = []
+
+        cat_by_region = selected.groupby(['year', 'region'])['hf_score'].mean().reset_index()
+        cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score')
+        reg = df.loc[(df['year'] == 2020) & (df['countries'] == i), 'region'].values[0]
+
+        reg_score = cat_pivot[str(reg)].to_list()
+        region_score.append(reg_score)
+
+        for j in df['year'].unique():
+            hf_score = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_score']
+            country_hf.append(float(hf_score))
+
+        country_hf = country_hf[::-1]
+        countries_score.append(country_hf)
+
+
+caucasus = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
+
+for i in range(len(country) - len(caucasus)):
+        hf_graph = {'hf': countries_score[i],
+                    'world': world_avg,
+                    'reg': region_score[i]}
+        graph_df = pd.DataFrame(hf_graph)
+        graph_df.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
+                        index=False, header=False)
+
+# ranking graph
+for i in range(len(country) - len(caucasus)):
+    rank_country = []
+    for j in df['year'].unique():
+        ranking = df.loc[(df['year'] == j) & (df['countries'] == country[i]), 'hf_rank']
+        rank_country.append(float(ranking))
+    rank_country = rank_country[::-1]
+    w = pd.DataFrame(rank_country)
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
+             index=False, header=False)

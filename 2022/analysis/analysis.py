@@ -34,6 +34,7 @@ regions = df['region'].unique()
 
 # selecting rows based on condition | ~ is not in
 selected_df = df[~df['countries'].isin(countries)]
+selected_df.to_csv('../../2022/selected_countries.csv', index=False)
 
 
 # -------------------------------------- functions
