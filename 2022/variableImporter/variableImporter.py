@@ -3,6 +3,9 @@ import numpy as np
 
 # read csv
 df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
+no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
+df = df[~df['countries'].isin(no_countries)]
+
 
 # clean 'data' columns
 for i in df.columns:
@@ -87,18 +90,12 @@ for i in hf_nu:
     countries_nu.append(nu)
     years_nu.append(ye)
 
-# print(countries_nu)
-# print(years_nu)
-#
-# print(len(countries_nu))
-# print(len(years_nu))
-# print(len(hf_nu))
 
 for i in range(len(hf_nu)):
     for j in range(len(all_pf)):
         for k in range(len(df[all_pf[j]])):
 
-            if df["countries"][k] == countries_nu[i] and df["year"][k] <= years_nu[i]:
+            if df['countries'][k] == countries_nu[i] and df['year'][k] <= years_nu[i]:
                 df[all_pf[j]][k] = np.nan
                 df["pf_score"][k] = np.nan
 
@@ -113,8 +110,6 @@ rankingef = [(str(int(i)) + '/165') for i in df.loc[df['year'] == 2020, 'ef_rank
 pfscore2020 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2020, 'pf_score']]  # two decimal points
 efscore2020 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2020, 'ef_score']]  # two decimal points
 
-# with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-#     print(df.dtypes)
 
 decimals = 1
 df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_quartile', 'hf_score', 'pf_score', 'ef_score', 'ef_regulation_labor_dismissal'])]] = df[
@@ -241,27 +236,24 @@ countries_score = []
 region_score = []
 for i in df['countries'].unique():
 
-    if i not in ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']:
-        country_hf = []
+    country_hf = []
 
-        cat_by_region = selected.groupby(['year', 'region'])['hf_score'].mean().reset_index()
-        cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score')
-        reg = df.loc[(df['year'] == 2020) & (df['countries'] == i), 'region'].values[0]
+    cat_by_region = selected.groupby(['year', 'region'])['hf_score'].mean().reset_index()
+    cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score')
+    reg = df.loc[(df['year'] == 2020) & (df['countries'] == i), 'region'].values[0]
 
-        reg_score = cat_pivot[str(reg)].to_list()
-        region_score.append(reg_score)
+    reg_score = cat_pivot[str(reg)].to_list()
+    region_score.append(reg_score)
 
-        for j in df['year'].unique():
-            hf_score = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_score']
-            country_hf.append(float(hf_score))
+    for j in df['year'].unique():
+        hf_score = df.loc[(df['year'] == j) & (df['countries'] == i), 'hf_score']
+        country_hf.append(float(hf_score))
 
-        country_hf = country_hf[::-1]
-        countries_score.append(country_hf)
+    country_hf = country_hf[::-1]
+    countries_score.append(country_hf)
 
 
-caucasus = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
-
-for i in range(len(country) - len(caucasus)):
+for i in range(len(country)):
         hf_graph = {'hf': countries_score[i],
                     'world': world_avg,
                     'reg': region_score[i]}
@@ -270,7 +262,7 @@ for i in range(len(country) - len(caucasus)):
                         index=False, header=False)
 
 # ranking graph
-for i in range(len(country) - len(caucasus)):
+for i in range(len(country)):
     rank_country = []
     for j in df['year'].unique():
         ranking = df.loc[(df['year'] == j) & (df['countries'] == country[i]), 'hf_rank']
