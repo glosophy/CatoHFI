@@ -4,8 +4,6 @@ import numpy as np
 # read csv
 df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
 no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
-df = df[~df['countries'].isin(no_countries)]
-
 
 # clean 'data' columns
 for i in df.columns:
@@ -49,8 +47,8 @@ all_ef = ['ef_government', 'ef_government_consumption', 'ef_government_transfers
           'ef_money_currency', 'ef_trade', 'ef_trade_tariffs', 'ef_trade_regulatory', 'ef_trade_black',
           'ef_trade_movement', 'ef_regulation', 'ef_regulation_credit', 'ef_regulation_labor', 'ef_regulation_business']
 
-country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Australia', 'Austria',
-                'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
+country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Australia', 'Austria',
+                'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
                 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia',
                 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina',
                 'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada',
@@ -58,12 +56,12 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Austral
                 'CongoDem', 'CongoRep', 'CostaRica', 'CotedIvoire', 'Croatia',
                 'Cyprus', 'Czech', 'Denmark', 'Djibouti', 'DominicanRep',
                 'Ecuador', 'Egypt', 'Salvador', 'Estonia', 'Eswatini',
-                'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon', 'Gambia', 'Georgia',
+                'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon', 'Gambia',
                 'Germany', 'Ghana', 'Greece', 'Guatemala', 'Guinea', 'GuineaBissau', 'Guyana',
                 'Haiti', 'Honduras', 'HongKong', 'Hungary', 'Iceland', 'India',
                 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
-                'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Korea', 'Kuwait',
-                'Kyrgyz', 'Lao', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia',
+                'Jamaica', 'Japan', 'Jordan', 'Kenya', 'Korea', 'Kuwait',
+                'Lao', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia',
                 'Libya', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Mali',
                 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Mongolia',
                 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nepal',
@@ -73,7 +71,7 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Austral
                 'Russia', 'Rwanda', 'SaudiArabia', 'Senegal', 'Serbia',
                 'Seychelles', 'SierraLeone', 'Singapore', 'Slovak', 'Slovenia',
                 'Somalia', 'SouthAfrica', 'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Sweden',
-                'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania',
+                'Switzerland', 'Syria', 'Taiwan', 'Tanzania',
                 'Thailand', 'TimorLeste', 'Togo', 'Trinidad', 'Tunisia', 'Turkey',
                 'Uganda', 'Ukraine', 'UnitedAE', 'UnitedKingdom',
                 'UnitedStates', 'Uruguay', 'Venezuela', 'Vietnam', 'Yemen',
@@ -81,7 +79,7 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Armenia', 'Austral
 
 
 hf_nu = df[df['hf_score'].isnull()].index.tolist()
-print(hf_nu)
+# print(hf_nu)
 countries_nu = []
 years_nu = []
 for i in hf_nu:
@@ -97,10 +95,13 @@ for i in range(len(hf_nu)):
 
             if df['countries'][k] == countries_nu[i] and df['year'][k] <= years_nu[i]:
                 df[all_pf[j]][k] = np.nan
-                df["pf_score"][k] = np.nan
+                df['pf_score'][k] = np.nan
 
 
 country = df['countries'].unique()
+print(country)
+country = list(set(no_countries).intersection(country))
+print(country)
 country_name = [i.upper() for i in country]
 region = [i.upper() for i in df.loc[df['year'] == 2020, 'region']]
 ranking2020 = [int(i) for i in df.loc[df['year'] == 2020, 'hf_rank']]
@@ -131,19 +132,20 @@ for i in country:
 
     for j in main_pf:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), j]
-        pf.append(float(x))
+        print(x)
+        pf.append(x)
 
     for k in main_ef:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), k]
-        ef.append(float(x))
+        ef.append(x)
 
     for l in other_cat_pf:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), l]
-        other_pf.append(float(x))
+        other_pf.append(x)
 
     for m in other_cat_ef:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), m]
-        other_ef.append(float(x))
+        other_ef.append(x)
 
     list_score_ef_main.append(ef)
     list_score_pf_main.append(pf)
@@ -222,6 +224,7 @@ for co in range(len(country)):
 
 # human freedom chart - order: country, world, region
 selected = pd.read_csv('../../2022/selected_countries.csv')
+selected = selected[~selected['countries'].isin(no_countries)]
 
 # world average
 world_avg = []
