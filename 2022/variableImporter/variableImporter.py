@@ -100,8 +100,8 @@ for i in range(len(hf_nu)):
 
 country = df['countries'].unique().tolist()
 
-for b in no_countries:
-    country.remove(b)
+# for b in no_countries:
+#     country.remove(b)
 
 country_name = [i.upper() for i in country]
 region = [i.upper() for i in df.loc[df['year'] == 2000, 'region']]
@@ -209,7 +209,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(pf)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country[co]),
              index=False, header=False)
 
     # economic freedom
@@ -220,12 +220,13 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country[co]),
              index=False, header=False)
 
 # human freedom chart - order: country, world, region
 selected = pd.read_csv('../../2022/selected_countries.csv')
-selected = selected[~selected['countries'].isin(no_countries)]
+# selected = selected[~selected['countries'].isin(no_countries)]
+# selected = selected['countries']
 
 # world average
 world_avg = []
@@ -262,7 +263,7 @@ for i in range(len(country)):
                     'world': world_avg,
                     'reg': region_score[i]}
         graph_df = pd.DataFrame(hf_graph)
-        graph_df.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
+        graph_df.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country[i]),
                         index=False, header=False)
 
 # ranking graph
@@ -273,5 +274,5 @@ for i in range(len(country)):
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
+    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country[i]),
              index=False, header=False)
