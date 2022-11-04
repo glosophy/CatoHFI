@@ -98,12 +98,13 @@ for i in range(len(hf_nu)):
                 df['pf_score'][k] = np.nan
 
 
-country = df['countries'].unique()
-print(country)
-country = list(set(no_countries).intersection(country))
-print(country)
+country = df['countries'].unique().tolist()
+
+for b in no_countries:
+    country.remove(b)
+
 country_name = [i.upper() for i in country]
-region = [i.upper() for i in df.loc[df['year'] == 2020, 'region']]
+region = [i.upper() for i in df.loc[df['year'] == 2000, 'region']]
 ranking2020 = [int(i) for i in df.loc[df['year'] == 2020, 'hf_rank']]
 hfscore2020 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2020, 'hf_score']]  # two decimal points
 rankingpf = [(str(int(i)) + '/165') for i in df.loc[df['year'] == 2020, 'pf_rank']]
@@ -133,19 +134,19 @@ for i in country:
     for j in main_pf:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), j]
         print(x)
-        pf.append(x)
+        pf.append(float(x))
 
     for k in main_ef:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), k]
-        ef.append(x)
+        ef.append(float(x))
 
     for l in other_cat_pf:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), l]
-        other_pf.append(x)
+        other_pf.append(float(x))
 
     for m in other_cat_ef:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), m]
-        other_ef.append(x)
+        other_ef.append(float(x))
 
     list_score_ef_main.append(ef)
     list_score_pf_main.append(pf)
@@ -243,7 +244,7 @@ for i in df['countries'].unique():
 
     cat_by_region = selected.groupby(['year', 'region'])['hf_score'].mean().reset_index()
     cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score')
-    reg = df.loc[(df['year'] == 2020) & (df['countries'] == i), 'region'].values[0]
+    reg = df.loc[(df['year'] == 2000) & (df['countries'] == i), 'region'].values[0]
 
     reg_score = cat_pivot[str(reg)].to_list()
     region_score.append(reg_score)
