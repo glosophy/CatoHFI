@@ -273,8 +273,19 @@ for i in range(len(country)):
         ranking = df.loc[(df['year'] == j) & (df['countries'] == country[i]), 'hf_rank']
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
+
+    for k in range(len(rank_country)):
+        placeholder_list = []
+        if np.isnan(rank_country[k]) == False:
+            placeholder_list.append(rank_country[k])
+        ranking_diff = placeholder_list[0] - placeholder_list[-1]
+
+        if ranking_diff > 0:
+            hfrankvar.append('▲ ' + abs(ranking_diff))
+        if ranking_diff < 0:
+            hfrankvar.append('▼ ' + abs(ranking_diff))
+
     w = pd.DataFrame(rank_country)
-    hfrank =
     w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
