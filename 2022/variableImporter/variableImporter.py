@@ -4,6 +4,7 @@ import numpy as np
 # read csv
 df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
 no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
+# df = df[~df['countries'].isin(no_countries)]
 
 # clean 'data' columns
 for i in df.columns:
@@ -79,7 +80,7 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Australia', 'Austr
 
 
 hf_nu = df[df['hf_score'].isnull()].index.tolist()
-# print(hf_nu)
+
 countries_nu = []
 years_nu = []
 for i in hf_nu:
@@ -133,7 +134,6 @@ for i in country:
 
     for j in main_pf:
         x = df.loc[(df['year'] == 2020) & (df['countries'] == i), j]
-        print(x)
         pf.append(float(x))
 
     for k in main_ef:
@@ -238,11 +238,11 @@ world_avg = world_avg[::-1]
 # score countries
 countries_score = []
 region_score = []
-for i in df['countries'].unique():
+for i in country:
 
     country_hf = []
 
-    cat_by_region = selected.groupby(['year', 'region'])['hf_score'].mean().reset_index()
+    cat_by_region = df.groupby(['year', 'region'])['hf_score'].mean().reset_index()
     cat_pivot = cat_by_region.pivot(index='year', columns='region', values='hf_score')
     reg = df.loc[(df['year'] == 2000) & (df['countries'] == i), 'region'].values[0]
 
@@ -266,6 +266,7 @@ for i in range(len(country)):
                         index=False, header=False)
 
 # ranking graph
+hfrankvar = []
 for i in range(len(country)):
     rank_country = []
     for j in df['year'].unique():
@@ -273,5 +274,188 @@ for i in range(len(country)):
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
     w = pd.DataFrame(rank_country)
+    hfrank =
     w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
+
+
+# main years second page
+list_score_pf_main_page2 = []
+list_score_other_pf_main_page2 = []
+for k in df['year'].unique():
+    pf = []
+    other_pf = []
+
+    for i in country:
+        years_main = []
+        years_other = []
+        for j in main_pf:
+            x = df.loc[(df['year'] == k) & (df['countries'] == i), j]
+            years_main.append(float(x))
+
+        for l in other_cat_pf:
+            x = df.loc[(df['year'] == k) & (df['countries'] == i), l]
+            years_other.append(float(x))
+
+        pf.append(years_main)
+        other_pf.append(years_other)
+
+    years_pf_pf = []
+    for m in pf:
+        a = str(m[0]) + '\n' * 6 + str(m[1]) + '\n' * 4 + str(m[2]) + '\n' * 4 + str(m[3]) + '\n' * 4 + str(
+        m[4]) + '\n' * 6 + str(m[5]) + '\n' * 7 + str(m[6])
+        years_pf_pf.append(a)
+
+    years_other_other = []
+    for n in other_pf:
+        b = str(n[0]) + '\n' + str(n[1]) + '\n' + str(n[2]) + '\n' + str(n[3]) + '\n' * 3 + \
+        str(n[4]) + '\n' + str(n[5]) + '\n' * 3 + \
+        str(n[6]) + '\n' + str(n[7]) + '\n' * 3 + \
+        str(n[8]) + '\n' + str(n[9]) + '\n' * 3 + \
+        str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n' + str(n[13]) + '\n' * 3 + \
+        str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' + str(n[18]) + '\n' * 3 + \
+        str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n' + str(n[22])
+        years_other_other.append(b)
+
+    list_score_pf_main_page2.append(years_pf_pf)
+    list_score_other_pf_main_page2.append(years_other_other)
+
+# score country by year
+score_year = []
+for k in df['year'].unique():
+    score = []
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'hf_score']
+        x = float(x)
+        score.append('{:.2f}'.format(x))
+    score_year.append(score)
+
+# ranking by year
+rank_year = []
+for k in df['year'].unique():
+    rank = []
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'hf_rank']
+        x = float(x)
+        rank.append('{:.2f}'.format(x))
+    rank_year.append(rank)
+
+# dscores:
+dscore = []
+for k in df['year'].unique():
+    midstep = []
+    for i in country:
+        x = df.loc[(df['year'] == k) & (df['countries'] == i), 'pf_score'].values[0]
+        y = df.loc[(df['year'] == k) & (df['countries'] == i), 'ef_score'].values[0]
+        a = str('{:.2f}'.format(y)) + '\n' + str('{:.2f}'.format(x))
+        midstep.append(a)
+    dscore.append(midstep)
+
+scores = []
+for i in df['year'].unique():
+    midstep = []
+    for k in country:
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_score'].values[0]
+        midstep.append(str('{:.2f}'.format(float(x))))
+    scores.append(midstep)
+
+rank_years = []
+for i in df['year'].unique():
+    midstep2 = []
+    for k in country:
+        x = df.loc[(df['year'] == i) & (df['countries'] == k), 'hf_rank'].values[0]
+        midstep2.append(str('{:.0f}'.format(float(x))))
+    rank_years.append(midstep2)
+
+
+# create dictionary with all variables
+d = {
+
+    'countryname': country_name,
+     'country': country,
+     'region': region,
+     'ranking': ranking2020,
+     'score': hfscore2020,
+     'rankingpf': rankingpf,
+     'scorepf': pfscore2020,
+     'rankingef': rankingef,
+     'scoreef': efscore2020,
+     'listscorepfmain': final_pf_main,
+     'listscorepf': final_other_pf_main,
+     '%graphpf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
+                  country_file],
+     'listscoreefmain': final_ef_main,
+     'listscoreef': final_other_ef_main,
+     '%graphef': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(co) for co in
+                  country_file],
+     '%graphscorehf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(co) for co in
+                       country_file],
+     '%graphrankinghf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(co) for co in
+                         country_file],
+
+     'main2020': list_score_pf_main_page2[0],
+     'main2019': list_score_pf_main_page2[1],
+     'main2018': list_score_pf_main_page2[2],
+     'main2016': list_score_pf_main_page2[4],
+     'main2014': list_score_pf_main_page2[6],
+     'main2012': list_score_pf_main_page2[8],
+     'main2010': list_score_pf_main_page2[10],
+     'main2008': list_score_pf_main_page2[12],
+     'main2006': list_score_pf_main_page2[14],
+     'main2004': list_score_pf_main_page2[16],
+     'main2002': list_score_pf_main_page2[18],
+     'main2000': list_score_pf_main_page2[20],
+
+     'sub2020': list_score_other_pf_main_page2[0],
+     'sub2019': list_score_other_pf_main_page2[1],
+     'sub2018': list_score_other_pf_main_page2[2],
+     'sub2016': list_score_other_pf_main_page2[4],
+     'sub2014': list_score_other_pf_main_page2[6],
+     'sub2012': list_score_other_pf_main_page2[8],
+     'sub2010': list_score_other_pf_main_page2[10],
+     'sub2008': list_score_other_pf_main_page2[12],
+     'sub2006': list_score_other_pf_main_page2[14],
+     'sub2004': list_score_other_pf_main_page2[16],
+     'sub2002': list_score_other_pf_main_page2[18],
+     'sub2000': list_score_other_pf_main_page2[20],
+
+     'dscore2020': dscore[0],
+     'dscore2019': dscore[1],
+     'dscore2018': dscore[2],
+     'dscore2016': dscore[4],
+     'dscore2014': dscore[6],
+     'dscore2012': dscore[8],
+     'dscore2010': dscore[10],
+     'dscore2008': dscore[12],
+     'dscore2006': dscore[14],
+     'dscore2004': dscore[16],
+     'dscore2002': dscore[18],
+     'dscore2000': dscore[20],
+
+     'score2020': scores[0],
+     'score2019': scores[1],
+     'score2018': scores[2],
+     'score2016': scores[4],
+     'score2014': scores[6],
+     'score2012': scores[8],
+     'score2010': scores[10],
+     'score2008': scores[12],
+     'score2006': scores[14],
+     'score2004': scores[16],
+     'score2002': scores[18],
+     'score2000': scores[20],
+
+     'ranking2020': rank_years[0],
+     'ranking2019': rank_years[1],
+     'ranking2018': rank_years[2],
+     'ranking2016': rank_years[4],
+     'ranking2014': rank_years[6],
+     'ranking2012': rank_years[8],
+     'ranking2010': rank_years[10],
+     'ranking2008': rank_years[12],
+     'ranking2006': rank_years[14],
+     'ranking2004': rank_years[16],
+     'ranking2002': rank_years[18],
+     'ranking2000': rank_years[20]
+
+     }
