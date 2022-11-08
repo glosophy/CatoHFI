@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import math, itertools
 
 # read csv
 df = pd.read_csv('../../2022/cleaning/hfi2022_cc.csv')
@@ -274,16 +275,13 @@ for i in range(len(country)):
         rank_country.append(float(ranking))
     rank_country = rank_country[::-1]
 
-    for k in range(len(rank_country)):
-        placeholder_list = []
-        if np.isnan(rank_country[k]) == False:
-            placeholder_list.append(rank_country[k])
-        ranking_diff = placeholder_list[0] - placeholder_list[-1]
+    placeholder_list = [k for k in rank_country if not math.isnan(k)][:]
+    ranking_diff = placeholder_list[0] - placeholder_list[-1]
 
-        if ranking_diff > 0:
-            hfrankvar.append('▲ ' + abs(ranking_diff))
-        if ranking_diff < 0:
-            hfrankvar.append('▼ ' + abs(ranking_diff))
+    if ranking_diff > 0:
+        hfrankvar.append('▲ ' + str(abs(int(ranking_diff))))
+    if ranking_diff < 0:
+        hfrankvar.append('▼ ' + str(abs(int(ranking_diff))))
 
     w = pd.DataFrame(rank_country)
     w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
