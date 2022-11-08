@@ -72,3 +72,8 @@ df.columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile
               'ef_score', 'ef_rank']
 
 df.to_csv('hfi2022_cc.csv', index=False)
+
+no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
+df = df[~df['countries'].isin(no_countries)]
+
+df.to_csv('hfi2022_ccopy.csv', index=False)
