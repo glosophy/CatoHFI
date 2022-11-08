@@ -79,8 +79,9 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Australia', 'Austr
                 'UnitedStates', 'Uruguay', 'Venezuela', 'Vietnam', 'Yemen',
                 'Zambia', 'Zimbabwe']
 
-
 hf_nu = df[df['hf_score'].isnull()].index.tolist()
+
+print(hf_nu)
 
 countries_nu = []
 years_nu = []
@@ -90,6 +91,8 @@ for i in hf_nu:
     countries_nu.append(nu)
     years_nu.append(ye)
 
+print(countries_nu)
+print(years_nu)
 
 for i in range(len(hf_nu)):
     for j in range(len(all_pf)):
@@ -98,7 +101,6 @@ for i in range(len(hf_nu)):
             if df['countries'][k] == countries_nu[i] and df['year'][k] <= years_nu[i]:
                 df[all_pf[j]][k] = np.nan
                 df['pf_score'][k] = np.nan
-
 
 country = df['countries'].unique().tolist()
 
@@ -114,10 +116,11 @@ rankingef = [(str(int(i)) + '/165') for i in df.loc[df['year'] == 2020, 'ef_rank
 pfscore2020 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2020, 'pf_score']]  # two decimal points
 efscore2020 = [str('{:.2f}'.format(i)) for i in df.loc[df['year'] == 2020, 'ef_score']]  # two decimal points
 
-
 decimals = 1
-df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_quartile', 'hf_score', 'pf_score', 'ef_score', 'ef_regulation_labor_dismissal'])]] = df[
-    df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_quartile', 'hf_score', 'pf_score', 'ef_score', 'ef_regulation_labor_dismissal'])]].apply(
+df[df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_quartile', 'hf_score', 'pf_score', 'ef_score',
+                                'ef_regulation_labor_dismissal'])]] = df[
+    df.columns[~df.columns.isin(['countries', 'region', 'year', 'hf_quartile', 'hf_score', 'pf_score', 'ef_score',
+                                 'ef_regulation_labor_dismissal'])]].apply(
     lambda x: round(x, decimals))
 
 df['hf_rank'] = pd.to_numeric(df['hf_rank'], downcast="integer")
@@ -239,6 +242,7 @@ world_avg = world_avg[::-1]
 # score countries
 countries_score = []
 region_score = []
+hfscorevar = []
 for i in country:
 
     country_hf = []
@@ -257,14 +261,22 @@ for i in country:
     country_hf = country_hf[::-1]
     countries_score.append(country_hf)
 
+    score_placeholder_list = [k for k in country_hf if not math.isnan(k)][:]
+    score_diff = score_placeholder_list[0] - score_placeholder_list[-1]
+
+    if score_diff > 0:
+        hfscorevar.append('▲ ' + str(abs(float(score_diff))))
+    if score_diff < 0:
+        hfscorevar.append('▼ ' + str(abs(float(score_diff))))
 
 for i in range(len(country)):
-        hf_graph = {'hf': countries_score[i],
-                    'world': world_avg,
-                    'reg': region_score[i]}
-        graph_df = pd.DataFrame(hf_graph)
-        graph_df.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
-                        index=False, header=False)
+    hf_graph = {'hf': countries_score[i],
+                'world': world_avg,
+                'reg': region_score[i]}
+    graph_df = pd.DataFrame(hf_graph)
+    graph_df.to_csv(
+        '/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
+        index=False, header=False)
 
 # ranking graph
 hfrankvar = []
@@ -286,7 +298,6 @@ for i in range(len(country)):
     w = pd.DataFrame(rank_country)
     w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
-
 
 # main years second page
 list_score_pf_main_page2 = []
@@ -312,18 +323,18 @@ for k in df['year'].unique():
     years_pf_pf = []
     for m in pf:
         a = str(m[0]) + '\n' * 6 + str(m[1]) + '\n' * 4 + str(m[2]) + '\n' * 4 + str(m[3]) + '\n' * 4 + str(
-        m[4]) + '\n' * 6 + str(m[5]) + '\n' * 7 + str(m[6])
+            m[4]) + '\n' * 6 + str(m[5]) + '\n' * 7 + str(m[6])
         years_pf_pf.append(a)
 
     years_other_other = []
     for n in other_pf:
         b = str(n[0]) + '\n' + str(n[1]) + '\n' + str(n[2]) + '\n' + str(n[3]) + '\n' * 3 + \
-        str(n[4]) + '\n' + str(n[5]) + '\n' * 3 + \
-        str(n[6]) + '\n' + str(n[7]) + '\n' * 3 + \
-        str(n[8]) + '\n' + str(n[9]) + '\n' * 3 + \
-        str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n' + str(n[13]) + '\n' * 3 + \
-        str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' + str(n[18]) + '\n' * 3 + \
-        str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n' + str(n[22])
+            str(n[4]) + '\n' + str(n[5]) + '\n' * 3 + \
+            str(n[6]) + '\n' + str(n[7]) + '\n' * 3 + \
+            str(n[8]) + '\n' + str(n[9]) + '\n' * 3 + \
+            str(n[10]) + '\n' + str(n[11]) + '\n' + str(n[12]) + '\n' + str(n[13]) + '\n' * 3 + \
+            str(n[14]) + '\n' + str(n[15]) + '\n' + str(n[16]) + '\n' + str(n[17]) + '\n' + str(n[18]) + '\n' * 3 + \
+            str(n[19]) + '\n' + str(n[20]) + '\n' + str(n[21]) + '\n' + str(n[22])
         years_other_other.append(b)
 
     list_score_pf_main_page2.append(years_pf_pf)
@@ -376,95 +387,103 @@ for i in df['year'].unique():
         midstep2.append(str('{:.0f}'.format(float(x))))
     rank_years.append(midstep2)
 
-
 # create dictionary with all variables
 d = {
 
     'countryname': country_name,
-     'country': country,
-     'region': region,
-     'ranking': ranking2020,
-     'score': hfscore2020,
-     'rankingpf': rankingpf,
-     'scorepf': pfscore2020,
-     'rankingef': rankingef,
-     'scoreef': efscore2020,
-     'listscorepfmain': final_pf_main,
-     'listscorepf': final_other_pf_main,
-     '%graphpf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
-                  country_file],
-     'listscoreefmain': final_ef_main,
-     'listscoreef': final_other_ef_main,
-     '%graphef': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(co) for co in
-                  country_file],
-     '%graphscorehf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(co) for co in
-                       country_file],
-     '%graphrankinghf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(co) for co in
-                         country_file],
+    'country': country,
+    'region': region,
+    'ranking': ranking2020,
+    'score': hfscore2020,
+    'rankingpf': rankingpf,
+    'scorepf': pfscore2020,
+    'rankingef': rankingef,
+    'scoreef': efscore2020,
+    'hfscorevariation': hfscorevar,
+    'hfrankvariation': hfrankvar,
+    'listscorepfmain': final_pf_main,
+    'listscorepf': final_other_pf_main,
+    '%graphpf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
+                 country_file],
+    'listscoreefmain': final_ef_main,
+    'listscoreef': final_other_ef_main,
+    '%graphef': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(co) for co in
+                 country_file],
+    '%graphscorehf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(co) for co
+                      in country_file],
+    '%graphrankinghf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(co) for
+                        co in country_file],
 
-     'main2020': list_score_pf_main_page2[0],
-     'main2019': list_score_pf_main_page2[1],
-     'main2018': list_score_pf_main_page2[2],
-     'main2016': list_score_pf_main_page2[4],
-     'main2014': list_score_pf_main_page2[6],
-     'main2012': list_score_pf_main_page2[8],
-     'main2010': list_score_pf_main_page2[10],
-     'main2008': list_score_pf_main_page2[12],
-     'main2006': list_score_pf_main_page2[14],
-     'main2004': list_score_pf_main_page2[16],
-     'main2002': list_score_pf_main_page2[18],
-     'main2000': list_score_pf_main_page2[20],
+    'main2020': list_score_pf_main_page2[0],
+    'main2019': list_score_pf_main_page2[1],
+    'main2018': list_score_pf_main_page2[2],
+    'main2016': list_score_pf_main_page2[4],
+    'main2014': list_score_pf_main_page2[6],
+    'main2012': list_score_pf_main_page2[8],
+    'main2010': list_score_pf_main_page2[10],
+    'main2008': list_score_pf_main_page2[12],
+    'main2006': list_score_pf_main_page2[14],
+    'main2004': list_score_pf_main_page2[16],
+    'main2002': list_score_pf_main_page2[18],
+    'main2000': list_score_pf_main_page2[20],
 
-     'sub2020': list_score_other_pf_main_page2[0],
-     'sub2019': list_score_other_pf_main_page2[1],
-     'sub2018': list_score_other_pf_main_page2[2],
-     'sub2016': list_score_other_pf_main_page2[4],
-     'sub2014': list_score_other_pf_main_page2[6],
-     'sub2012': list_score_other_pf_main_page2[8],
-     'sub2010': list_score_other_pf_main_page2[10],
-     'sub2008': list_score_other_pf_main_page2[12],
-     'sub2006': list_score_other_pf_main_page2[14],
-     'sub2004': list_score_other_pf_main_page2[16],
-     'sub2002': list_score_other_pf_main_page2[18],
-     'sub2000': list_score_other_pf_main_page2[20],
+    'sub2020': list_score_other_pf_main_page2[0],
+    'sub2019': list_score_other_pf_main_page2[1],
+    'sub2018': list_score_other_pf_main_page2[2],
+    'sub2016': list_score_other_pf_main_page2[4],
+    'sub2014': list_score_other_pf_main_page2[6],
+    'sub2012': list_score_other_pf_main_page2[8],
+    'sub2010': list_score_other_pf_main_page2[10],
+    'sub2008': list_score_other_pf_main_page2[12],
+    'sub2006': list_score_other_pf_main_page2[14],
+    'sub2004': list_score_other_pf_main_page2[16],
+    'sub2002': list_score_other_pf_main_page2[18],
+    'sub2000': list_score_other_pf_main_page2[20],
 
-     'dscore2020': dscore[0],
-     'dscore2019': dscore[1],
-     'dscore2018': dscore[2],
-     'dscore2016': dscore[4],
-     'dscore2014': dscore[6],
-     'dscore2012': dscore[8],
-     'dscore2010': dscore[10],
-     'dscore2008': dscore[12],
-     'dscore2006': dscore[14],
-     'dscore2004': dscore[16],
-     'dscore2002': dscore[18],
-     'dscore2000': dscore[20],
+    'dscore2020': dscore[0],
+    'dscore2019': dscore[1],
+    'dscore2018': dscore[2],
+    'dscore2016': dscore[4],
+    'dscore2014': dscore[6],
+    'dscore2012': dscore[8],
+    'dscore2010': dscore[10],
+    'dscore2008': dscore[12],
+    'dscore2006': dscore[14],
+    'dscore2004': dscore[16],
+    'dscore2002': dscore[18],
+    'dscore2000': dscore[20],
 
-     'score2020': scores[0],
-     'score2019': scores[1],
-     'score2018': scores[2],
-     'score2016': scores[4],
-     'score2014': scores[6],
-     'score2012': scores[8],
-     'score2010': scores[10],
-     'score2008': scores[12],
-     'score2006': scores[14],
-     'score2004': scores[16],
-     'score2002': scores[18],
-     'score2000': scores[20],
+    'score2020': scores[0],
+    'score2019': scores[1],
+    'score2018': scores[2],
+    'score2016': scores[4],
+    'score2014': scores[6],
+    'score2012': scores[8],
+    'score2010': scores[10],
+    'score2008': scores[12],
+    'score2006': scores[14],
+    'score2004': scores[16],
+    'score2002': scores[18],
+    'score2000': scores[20],
 
-     'ranking2020': rank_years[0],
-     'ranking2019': rank_years[1],
-     'ranking2018': rank_years[2],
-     'ranking2016': rank_years[4],
-     'ranking2014': rank_years[6],
-     'ranking2012': rank_years[8],
-     'ranking2010': rank_years[10],
-     'ranking2008': rank_years[12],
-     'ranking2006': rank_years[14],
-     'ranking2004': rank_years[16],
-     'ranking2002': rank_years[18],
-     'ranking2000': rank_years[20]
+    'ranking2020': rank_years[0],
+    'ranking2019': rank_years[1],
+    'ranking2018': rank_years[2],
+    'ranking2016': rank_years[4],
+    'ranking2014': rank_years[6],
+    'ranking2012': rank_years[8],
+    'ranking2010': rank_years[10],
+    'ranking2008': rank_years[12],
+    'ranking2006': rank_years[14],
+    'ranking2004': rank_years[16],
+    'ranking2002': rank_years[18],
+    'ranking2000': rank_years[20]
 
-     }
+}
+
+# create Dataframe
+df_final = pd.DataFrame(d)
+df_final.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/final.csv', index=False)
+df_final.to_csv('final.csv', index=False)
+
+print('csv FILE CREATED! :)')
