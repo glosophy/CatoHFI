@@ -213,7 +213,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(pf)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
     # economic freedom
@@ -224,7 +224,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
 # human freedom chart - order: country, world, region
@@ -306,7 +306,7 @@ for i in range(len(country)):
         hfrankvar.append('▼=' + str(abs(int(ranking_diff))))
 
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
 print("hfrankvar:", len(hfrankvar))
@@ -498,11 +498,9 @@ print(len(d))
 for i in d.values():
     print(len(i))
 
-
-
 # create Dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/final.csv', index=False)
+df_final.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/final.csv', index=False)
 df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')

@@ -344,4 +344,4 @@ def regions_analysis(indicators=main):
         print('-' * 25)
 
 
-improve_deteriorate(2000, 2020)
+# regions_analysis(all_categories)
