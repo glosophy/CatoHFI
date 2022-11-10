@@ -328,6 +328,7 @@ def regions_analysis(indicators=main):
     for i in indicators:
         by_region = selected_df.groupby(['year', 'region'])[i].mean().reset_index()
         region_pivot = by_region.pivot(index='year', columns='region', values=i)
+        region_pivot.to_csv('../exports/category_{}.csv'.format(i), index=False)
 
         for j in selected_df['region'].unique():
             a = np.array(region_pivot[j])
@@ -344,4 +345,3 @@ def regions_analysis(indicators=main):
         print('-' * 25)
 
 
-# regions_analysis(all_categories)
