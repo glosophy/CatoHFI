@@ -213,7 +213,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(pf)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
     # economic freedom
@@ -224,7 +224,7 @@ for co in range(len(country)):
         acc += 1
     w = pd.DataFrame(ef)
     w = w.fillna(0)  # fillna with 0 for the bar chart
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(country_file[co]),
              index=False, header=False)
 
 # human freedom chart - order: country, world, region
@@ -281,7 +281,7 @@ for i in range(len(country)):
                 'reg': region_score[i]}
     graph_df = pd.DataFrame(hf_graph)
     graph_df.to_csv(
-        '/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
+        '/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(country_file[i]),
         index=False, header=False)
 
 # ranking graph
@@ -304,7 +304,7 @@ for i in range(len(country)):
         hfrankvar.append(str(abs(int(ranking_diff))))
 
     w = pd.DataFrame(rank_country)
-    w.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
+    w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
 print("hfrankvar:", len(hfrankvar))
@@ -413,15 +413,15 @@ d = {
     'hfrankvariation': hfrankvar,
     'listscorepfmain': final_pf_main,
     'listscorepf': final_other_pf_main,
-    '%graphpf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
+    '%graphpf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
                  country_file],
     'listscoreefmain': final_ef_main,
     'listscoreef': final_other_ef_main,
-    '%graphef': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(co) for co in
+    '%graphef': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphEF/{}.csv'.format(co) for co in
                  country_file],
-    '%graphscorehf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(co) for co
+    '%graphscorehf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphHF/{}.csv'.format(co) for co
                       in country_file],
-    '%graphrankinghf': ['/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(co) for
+    '%graphrankinghf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(co) for
                         co in country_file],
 
     'main2020': list_score_pf_main_page2[0],
@@ -498,7 +498,7 @@ for i in d.values():
 
 # create Dataframe
 df_final = pd.DataFrame(d)
-df_final.to_csv('/Users/luisabrigo/Dropbox/Human Freedom Index/2022/Data/final.csv', index=False)
+df_final.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/final.csv', index=False)
 df_final.to_csv('final.csv', index=False)
 
 print('csv FILE CREATED! :)')
