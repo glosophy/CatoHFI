@@ -81,7 +81,7 @@ country_file = ['Albania', 'Algeria', 'Angola', 'Argentina', 'Australia', 'Austr
 
 hf_nu = df[df['hf_score'].isnull()].index.tolist()
 
-print(hf_nu)
+# print(hf_nu)
 
 countries_nu = []
 years_nu = []
@@ -91,8 +91,8 @@ for i in hf_nu:
     countries_nu.append(nu)
     years_nu.append(ye)
 
-print(countries_nu)
-print(years_nu)
+# print(countries_nu)
+# print(years_nu)
 
 for i in range(len(hf_nu)):
     for j in range(len(all_pf)):
@@ -243,6 +243,7 @@ world_avg = world_avg[::-1]
 countries_score = []
 region_score = []
 hfscorevar = []
+hfscorearrow = []
 for i in country:
 
     country_hf = []
@@ -264,15 +265,17 @@ for i in country:
     score_placeholder_list = [k for k in country_hf if not math.isnan(k)][:]
     score_diff = score_placeholder_list[0] - score_placeholder_list[-1]
 
+    hfscorevar.append(str(abs(float('{:.2f}'.format(score_diff)))))
+
     if score_diff > 0:
-        hfscorevar.append('▲ ' + str(abs(float('{:.2f}'.format(score_diff)))))
+        hfscorearrow.append('▲')
     if score_diff < 0:
-        hfscorevar.append('▼ ' + str(abs(float('{:.2f}'.format(score_diff)))))
+        hfscorearrow.append('▼')
     if score_diff == 0:
-        hfscorevar.append(str(abs(float(score_diff))))
+        hfscorearrow.append(' ')
 
 
-print("Hfscorevar:", len(hfscorevar))
+# print("Hfscorevar:", len(hfscorevar))
 
 
 for i in range(len(country)):
@@ -286,6 +289,7 @@ for i in range(len(country)):
 
 # ranking graph
 hfrankvar = []
+hfrankarrow = []
 for i in range(len(country)):
     rank_country = []
     for j in df['year'].unique():
@@ -296,18 +300,20 @@ for i in range(len(country)):
     placeholder_list = [k for k in rank_country if not math.isnan(k)][:]
     ranking_diff = placeholder_list[0] - placeholder_list[-1]
 
+    hfrankvar.append(str(abs(int(ranking_diff))))
+
     if ranking_diff > 0:
-        hfrankvar.append('▲ ' + str(abs(int(ranking_diff))))
+        hfrankarrow.append('▲')
     if ranking_diff < 0:
-        hfrankvar.append('▼ ' + str(abs(int(ranking_diff))))
+        hfrankarrow.append('▼')
     if ranking_diff == 0:
-        hfrankvar.append(str(abs(int(ranking_diff))))
+        hfrankarrow.append(' ')
 
     w = pd.DataFrame(rank_country)
     w.to_csv('/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphRank/{}.csv'.format(country_file[i]),
              index=False, header=False)
 
-print("hfrankvar:", len(hfrankvar))
+# print("hfrankvar:", len(hfrankvar))
 
 # main years second page
 list_score_pf_main_page2 = []
@@ -410,7 +416,9 @@ d = {
     'rankingef': rankingef,
     'scoreef': efscore2020,
     'hfscorevariation': hfscorevar,
+    'hfscorearrow': hfscorearrow,
     'hfrankvariation': hfrankvar,
+    'hfrankarrow': hfrankarrow,
     'listscorepfmain': final_pf_main,
     'listscorepf': final_other_pf_main,
     '%graphpf': ['/Users/guillerminasutter/Dropbox/Human Freedom Index/2022/Data/GraphPF/{}.csv'.format(co) for co in
@@ -491,10 +499,10 @@ d = {
 
 }
 
-print(len(d))
-
-for i in d.values():
-    print(len(i))
+# print(len(d))
+#
+# for i in d.values():
+#     print(len(i))
 
 # create Dataframe
 df_final = pd.DataFrame(d)

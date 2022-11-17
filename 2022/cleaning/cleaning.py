@@ -7,7 +7,7 @@ cwd = os.getcwd()
 # read csv
 df = pd.read_excel('../../2022/HFI2022.xlsx')
 
-print(df.columns)
+# print(df.columns)
 
 # rename columns
 df.columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
