@@ -294,7 +294,7 @@ for i in range(len(country)):
     rank_country = []
     for j in df['year'].unique():
         ranking = df.loc[(df['year'] == j) & (df['countries'] == country[i]), 'hf_rank']
-        rank_country.append(float(ranking))
+        rank_country.append(round(float(ranking), 0))
     rank_country = rank_country[::-1]
 
     placeholder_list = [k for k in rank_country if not math.isnan(k)][:]
