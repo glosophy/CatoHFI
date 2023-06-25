@@ -5,7 +5,8 @@ import os
 cwd = os.getcwd()
 
 # read csv
-df = pd.read_excel('../../2022/HFI2022.xlsx')
+# df = pd.read_excel('../../2022/HFI2022.xlsx')
+df = pd.read_excel('/Users/guillermina/Pycharm/CatoHFI/2022/HFI2022.xlsx')
 
 # print(df.columns)
 
