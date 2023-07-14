@@ -333,11 +333,11 @@ def regions_analysis(indicators=main):
         for j in selected_df['region'].unique():
             a = np.array(region_pivot[j])
             change = a[-1] - a[0]
-            print('Change in {0} score in {1} (2000-2020): {2}'.format(j, i, round(change, 2)))
+            print('Change in {0} score in {1} (2000-2021): {2}'.format(j, i, round(change, 2)))
 
-            plt.plot(range(2000, 2020 + 1), a, label=j)
+            plt.plot(range(2000, 2021 + 1), a, label=j)
             plt.legend(title='Regions', bbox_to_anchor=(1.05, 1), loc='upper left')
-            plt.title('{} Over Time (2000-2020)'.format(i))
+            plt.title('{} Over Time (2000-2021)'.format(i))
             plt.xlabel('Year')
             plt.ylabel('Score')
 
@@ -345,4 +345,12 @@ def regions_analysis(indicators=main):
         print('-' * 25)
 
 # ----------------------------------- charts
-density_plot(2000, 2021, all_regions=True)
+# density_plot(2000, 2021, indicator='ef_score')
+
+# improve_deteriorate(2000, 2021)
+
+# top_bottom_10(2000, 2021)
+
+# gap_10_percent(2000, 2021)
+
+regions_analysis()
