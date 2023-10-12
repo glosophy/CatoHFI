@@ -353,4 +353,4 @@ def regions_analysis(indicators=main):
 
 # gap_10_percent(2000, 2021)
 
-regions_analysis()
+regions_analysis(all_categories)
