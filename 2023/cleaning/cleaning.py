@@ -11,7 +11,7 @@ df = pd.read_csv('../../2023/HFI2023.csv')
 # print(df.columns)
 
 # rename columns
-df.columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
+df.columns = ['year', 'iso', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile',
               # rol
               'pf_rol_procedural', 'pf_rol_civil', 'pf_rol_criminal', 'pf_rol_vdem', 'pf_rol',
               # ss
@@ -74,7 +74,10 @@ df.columns = ['year', 'countries', 'region', 'hf_score', 'hf_rank', 'hf_quartile
 
 df.to_csv('hfi2023_cc.csv', index=False)
 
-no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
-df = df[~df['countries'].isin(no_countries)]
-
-df.to_csv('hfi2023_ccopy.csv', index=False)
+# no_countries = ['Armenia', 'Azerbaijan', 'Georgia', 'Kazakhstan', 'Kyrgyz Republic', 'Tajikistan']
+#
+# caucasus = df[df['countries'].isin(no_countries)]
+# df = df[~df['countries'].isin(no_countries)]
+#
+# caucasus.to_csv('caucasus_ccopy.csv')
+# df.to_csv('hfi2023_ccopy.csv', index=False)
